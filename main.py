@@ -42,5 +42,12 @@ async def avatar(interaction: discord.Interaction, member: discord.Member):
     await interaction.response.send_message(embed=embed)
 
 
+@Seele.tree.context_menu(name="Server Avatar")
+async def avatar(interaction: discord.Interaction, member: discord.Member):
+    embed = discord.Embed(color=discord.Color.random(), title=f"{member.name}'s Server Avatar")
+    embed.set_image(url=member.display_avatar.url)
+    await interaction.response.send_message(embed=embed)
+
+
 if __name__ == "__main__":
     Seele.run()
