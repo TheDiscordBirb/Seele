@@ -37,8 +37,6 @@ class Events(commands.Cog):
     async def on_ready(self):
         print(f"Username: {self.bot.user.name}")
         print(f"ID: {str(self.bot.user.id)}")
-        if not hasattr(self, "uptime"):
-            self.bot.uptime = datetime.datetime.now(datetime.timezone.utc)
 
 
 async def setup(self: commands.Bot):
