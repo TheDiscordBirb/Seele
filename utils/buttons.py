@@ -1,7 +1,7 @@
 import discord
 
 from mongo import get_database
-from utils.modals import RoleMenuSetup, EditRoleModal
+from utils.modals import EditRoleModal, RoleMenuSetup
 
 
 class RoleMenuSetupButtons(discord.ui.View):
