@@ -3,7 +3,7 @@ import os
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
-
+from utils.buttons import RoleMenuSetupButtons
 load_dotenv()
 
 
@@ -26,6 +26,7 @@ class Seele(commands.Bot):
                     )
         await self.tree.sync()
         # Add views here to be persistent
+        self.add_view(RoleMenuSetupButtons(timeout=None))
 
     def run(self):
         super().run(self.token, reconnect=True)
