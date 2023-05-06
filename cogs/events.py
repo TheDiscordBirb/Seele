@@ -1,7 +1,7 @@
-import datetime
 import sys
 import traceback
 
+import discord
 from discord.ext import commands
 
 
@@ -37,6 +37,11 @@ class Events(commands.Cog):
     async def on_ready(self):
         print(f"Username: {self.bot.user.name}")
         print(f"ID: {str(self.bot.user.id)}")
+
+    @commands.Cog.listener()
+    async def on_message(self, message: discord.Message):
+        if message.author == self.bot.user:
+            return
 
 
 async def setup(self: commands.Bot):
