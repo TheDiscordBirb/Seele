@@ -3,7 +3,9 @@ import os
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
+
 from utils.buttons import RoleMenuSetupButtons
+
 load_dotenv()
 
 
@@ -45,7 +47,9 @@ async def avatar(interaction: discord.Interaction, member: discord.Member):
 
 @Seele.tree.context_menu(name="Server Avatar")
 async def avatar(interaction: discord.Interaction, member: discord.Member):
-    embed = discord.Embed(color=discord.Color.random(), title=f"{member.name}'s Server Avatar")
+    embed = discord.Embed(
+        color=discord.Color.random(), title=f"{member.name}'s Server Avatar"
+    )
     embed.set_image(url=member.display_avatar.url)
     await interaction.response.send_message(embed=embed)
 
