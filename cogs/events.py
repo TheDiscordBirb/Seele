@@ -46,7 +46,7 @@ class Events(commands.Cog):
         if (
             message.author.bot
             or message.author == self.bot.user
-            or message.guild.get_role(1101868829317013647) not in message.author.roles
+            # or message.guild.get_role(1101868829317013647) not in message.author.roles
         ):
             return
 
