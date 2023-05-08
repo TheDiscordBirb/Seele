@@ -4,5 +4,6 @@ from pymongo import MongoClient
 
 
 def get_database():
-    client = MongoClient(os.getenv('CONNECTION_STRING'))
-    return client['Seele']
+    connection_string = os.environ["CONNECTION_STRING"]
+    client = MongoClient(connection_string)
+    return client["Seele"]
