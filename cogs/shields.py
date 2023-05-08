@@ -116,7 +116,7 @@ class Shields(commands.Cog):
         for role in self.role_shop.values():
             embed.add_field(
                 name=f"{role['name']}",
-                value=f"{role['price']}<:Shields_SM:1104809716460310549> code: `{role['code']}`",
+                value=f"{role['price']}<:Shields_SM:1104809716460310549> code: `{role['code']}`\nPreview: {interaction.guild.get_role(role['_id']).mention}",
                 inline=False,
             )
         await interaction.response.send_message(embed=embed)
@@ -139,7 +139,8 @@ class Shields(commands.Cog):
             for key, value in self.role_shop.items():
                 if key in data:
                     embed.add_field(
-                        name=value["name"], value=f'code: `{value["code"]}`'
+                        name=value["name"],
+                        value=f"code: `{value['code']}`\nPreview: {interaction.guild.get_role(value['_id']).mention}",
                     )
 
         await interaction.response.send_message(embed=embed)
@@ -186,11 +187,9 @@ class Shields(commands.Cog):
             f"You've purchased {role['name']} for {role['price']}<:Shields_SM:1104809716460310549>."
         )
 
-    @discord.app_commands.command(
-        name="equip_role", description="Equip a role you own."
-    )
+    @discord.app_commands.command(name="equip", description="Equip a role you own.")
     @discord.app_commands.describe(code="The code of the role you want to equip.")
-    async def equip_role(self, interaction: discord.Interaction, code: str):
+    async def equip(self, interaction: discord.Interaction, code: str):
         role_data = self.role_shop.get(code)
         if not role_data:
             return await interaction.response.send_message(
