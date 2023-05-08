@@ -4,34 +4,35 @@ import traceback
 import discord
 from discord.ext import commands
 
+from mongo import get_database
+
 
 class Events(commands.Cog):
+    cooldowns = {}
+
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx: commands.Context, error):
-        if isinstance(error, commands.NoPrivateMessage):
+        try:
+            raise error
+        except commands.NoPrivateMessage:
             await ctx.author.send("This command cannot be used in DMs.")
-        elif isinstance(error, commands.DisabledCommand):
+        except commands.DisabledCommand:
             await ctx.send("This command is disabled.")
-        elif isinstance(error, commands.CommandNotFound):
+        except commands.CommandNotFound:
             return
-        elif isinstance(error, commands.CommandOnCooldown):
+        except commands.CommandOnCooldown as e:
             await ctx.send(
-                f"This command is on cooldown for {error.retry_after:.2f} seconds."
+                f"This command is on cooldown for {e.retry_after:.2f} seconds."
             )
-        elif isinstance(error, commands.MissingPermissions):
+        except commands.MissingPermissions:
             await ctx.send("You do not have permission to use this command.")
-        elif isinstance(error, commands.NotOwner):
+        except commands.NotOwner:
             await ctx.send("This command is owner only.")
-        elif isinstance(error, commands.CommandInvokeError):
-            print(f"In {ctx.command.qualified_name}:", file=sys.stderr)
-            traceback.print_tb(error.original.__traceback__)
-            print(
-                f"{error.original.__class__.__name__}: {error.original}",
-                file=sys.stderr,
-            )
+        except Exception as e:
+            traceback.print_exception(type(e), e, e.__traceback__)
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -40,8 +41,40 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
-        if message.author == self.bot.user:
+        db = get_database()
+        shields = db["Shields"]
+        if (
+            message.author.bot
+            or message.author == self.bot.user
+            or message.guild.get_role(1101868829317013647) not in message.author.roles
+        ):
             return
+
+        if message.author.id in self.cooldowns:
+            remaining_time = (
+                self.cooldowns[message.author.id] - message.created_at.timestamp()
+            )
+            if remaining_time > 0:
+                return
+        self.cooldowns[message.author.id] = message.created_at.timestamp() + 20
+        player = shields.find_one({"_id": message.author.id})
+        if player is not None:
+            member = message.guild.get_member(message.author.id)
+            nitro_role = message.guild.get_role(1102939433038254091)
+            if nitro_role in member.roles:
+                shields.find_one_and_update(
+                    {"_id": message.author.id},
+                    {"$inc": {"Shields": 8}},
+                )
+            else:
+                shields.find_one_and_update(
+                    {"_id": message.author.id},
+                    {"$inc": {"Shields": 5}},
+                )
+        else:
+            shields.insert_one(
+                {"_id": message.author.id, "Shields": 5, "inventory": []}
+            )
 
 
 async def setup(self: commands.Bot):
