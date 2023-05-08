@@ -1,5 +1,4 @@
 import discord
-import pymongo
 
 from mongo import get_database
 from utils.modals import EditRoleModal, RoleMenuSetup
