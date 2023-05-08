@@ -1,34 +1,71 @@
 import discord
+import pymongo
 
 from mongo import get_database
 from utils.modals import EditRoleModal, RoleMenuSetup
 
 
 class RoleMenuSetupButtons(discord.ui.View):
-    db = get_database()
-    vanity_roles = db['Vanity Roles']
+    @discord.ui.button(
+        label="Create Role", custom_id="create_role", style=discord.ButtonStyle.green
+    )
+    async def create_role(
+        self, interaction: discord.Interaction, button: discord.ui.Button
+    ):
+        db = get_database()
+        vanity_roles = db["Vanity Roles"]
 
-    @discord.ui.button(label='Create Role', custom_id='create_role', style=discord.ButtonStyle.green)
-    async def create_role(self, interaction: discord.Interaction, button: discord.ui.Button):
-        nitro_role = discord.utils.get(interaction.guild.roles, id=1103669176725422121)
-        if nitro_role not in interaction.user.roles:
-            return await interaction.response.send_message('Only nitro boosters can use this feature.', ephemeral=True)
-        elif self.vanity_roles.find_one({'_id': interaction.user.id}) is not None:
-            return await interaction.response.send_message('You already have a custom role.', ephemeral=True)
-        await interaction.response.send_modal(RoleMenuSetup(title='Role Setup'))
+        nitro_role = interaction.guild.get_role(1102939433038254091)
+        aeon = interaction.guild.get_role(1101868829317013647)
+        wildfire = interaction.guild.get_role(1101868829296054320)
 
-    @discord.ui.button(label='Delete Role', custom_id='delete_role', style=discord.ButtonStyle.red)
-    async def delete_role(self, interaction: discord.Interaction, button: discord.ui.Button):
-        if self.vanity_roles.find_one({'_id': interaction.user.id}) is None:
-            return await interaction.response.send_message('You don\'t have a custom role.', ephemeral=True)
-        role = discord.utils.get(interaction.guild.roles,
-                                 id=self.vanity_roles.find_one({'_id': interaction.user.id})['role_id'])
-        await role.delete()
-        self.vanity_roles.delete_one({'_id': interaction.user.id})
-        await interaction.response.send_message('Your role has been deleted.', ephemeral=True)
+        player = vanity_roles.find_one({"_id": interaction.user.id})
+        if player:
+            return await interaction.response.send_message(
+                "You already have a custom role.", ephemeral=True
+            )
+        if any(role in interaction.user.roles for role in [nitro_role, aeon, wildfire]):
+            return await interaction.response.send_modal(
+                RoleMenuSetup(title="Role Setup")
+            )
 
-    @discord.ui.button(label='Edit Role', custom_id='edit_role', style=discord.ButtonStyle.blurple)
-    async def edit_role(self, interaction: discord.Interaction, button: discord.ui.Button):
-        if self.vanity_roles.find_one({'_id': interaction.user.id}) is None:
-            return await interaction.response.send_message('You don\'t have a custom role.', ephemeral=True)
-        await interaction.response.send_modal(EditRoleModal(title='Role Config'))
+        else:
+            return await interaction.response.send_message(
+                "Only nitro boosters can use this feature.", ephemeral=True
+            )
+
+    @discord.ui.button(
+        label="Delete Role", custom_id="delete_role", style=discord.ButtonStyle.red
+    )
+    async def delete_role(
+        self, interaction: discord.Interaction, button: discord.ui.Button
+    ):
+        db = get_database()
+        vanity_roles = db["Vanity Roles"]
+        player = vanity_roles.find_one({"_id": interaction.user.id})
+
+        if player:
+            role = discord.utils.get(interaction.guild.roles, id=player["role_id"])
+            await role.delete()
+            vanity_roles.delete_one({"_id": interaction.user.id})
+            await interaction.response.send_message(
+                "Your role has been deleted.", ephemeral=True
+            )
+        else:
+            await interaction.response.send_message(
+                "You don't have a custom role.", ephemeral=True
+            )
+
+    @discord.ui.button(
+        label="Edit Role", custom_id="edit_role", style=discord.ButtonStyle.blurple
+    )
+    async def edit_role(
+        self, interaction: discord.Interaction, button: discord.ui.Button
+    ):
+        db = get_database()
+        vanity_roles = db["Vanity Roles"]
+        if vanity_roles.find_one({"_id": interaction.user.id}) is None:
+            return await interaction.response.send_message(
+                "You don't have a custom role.", ephemeral=True
+            )
+        return await interaction.response.send_modal(EditRoleModal(title="Role Config"))
