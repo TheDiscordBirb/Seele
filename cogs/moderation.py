@@ -21,6 +21,7 @@ class Moderation(commands.Cog):
         member = interaction.guild.get_member(member.id)
         ban_reason = reason if reason is not None else "Reason not provided."
         nsfw_banned_role = interaction.guild.get_role(1105208057417445386)
+        nsfw_access_role = interaction.guild.get_role(1104145533934772244)
         if not member:
             return await interaction.response.send_message(
                 "Invalid member.", ephemeral=True
@@ -29,6 +30,7 @@ class Moderation(commands.Cog):
             return await interaction.response.send_message(
                 f"{member.mention} is already NSFW Banned."
             )
+        await member.remove_roles(nsfw_access_role)
         await member.add_roles(nsfw_banned_role)
         await member.send(
             f"You've been NSFW Banned in **{interaction.guild.name}**\nReason: {ban_reason}"
@@ -52,6 +54,7 @@ class Moderation(commands.Cog):
     ):
         member = interaction.guild.get_member(member.id)
         nsfw_banned_role = interaction.guild.get_role(1105208057417445386)
+        nsfw_access_role = interaction.guild.get_role(1104145533934772244)
         if not member:
             return await interaction.response.send_message(
                 "Invalid member.", ephemeral=True
@@ -60,6 +63,7 @@ class Moderation(commands.Cog):
             return await interaction.response.send_message(
                 f"{member.mention} is not NSFW Banned."
             )
+        await member.add_roles(nsfw_access_role)
         await member.remove_roles(nsfw_banned_role)
         await interaction.response.send_message(f"NSFW Unbanned {member.mention}")
 
