@@ -1,6 +1,0 @@
-discord.py[voice]
-pymongo[srv]
-dnspython
-python-dotenv
-humanize
-requests
