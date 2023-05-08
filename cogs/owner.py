@@ -39,7 +39,10 @@ class Owner(commands.Cog):
     @commands.command(aliases=["re"])
     @commands.is_owner()
     async def reload_extension(self, ctx: commands.Context, ext: str):
-        await self.bot.reload_extension(f"cogs.{ext}")
+        try:
+            await self.bot.reload_extension(f"cogs.{ext}")
+        except commands.ExtensionNotFound:
+            return await ctx.send(f"{ext} is not a valid extension.")
         await ctx.send(f"Reloaded {ext}")
 
 
