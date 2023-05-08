@@ -45,6 +45,11 @@ class Owner(commands.Cog):
             return await ctx.send(f"{ext} is not a valid extension.")
         await ctx.send(f"Reloaded {ext}")
 
+    @commands.command(name="io")
+    @commands.is_owner()
+    async def is_online(self, ctx: commands.Context):
+        return await ctx.send("I'm online.")
+
 
 async def setup(self: commands.Bot):
     await self.add_cog(Owner(self))
