@@ -173,12 +173,12 @@ class Shields(commands.Cog):
         ]
         if inventory:
             return await interaction.response.send_message(
-                f"You already own {role['name']}."
+                f"You already own {role['name']}.", ephemeral=True
             )
 
         if player["Shields"] < role["price"]:
             return await interaction.response.send_message(
-                f"You can't afford {role['name']}."
+                f"You can't afford {role['name']}.", ephemeral=True
             )
 
         shields.update_one(
@@ -190,7 +190,8 @@ class Shields(commands.Cog):
         )
 
         await interaction.response.send_message(
-            f"You've purchased {role['name']} for {humanize.intcomma(role.get('price', 0))}<:Shields_SM:1104809716460310549>."
+            f"You've purchased {role['name']} for {humanize.intcomma(role.get('price', 0))}<:Shields_SM:1104809716460310549>.",
+            ephemeral=True,
         )
 
     @discord.app_commands.command(name="equip", description="Equip a role you own.")
