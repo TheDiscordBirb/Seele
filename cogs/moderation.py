@@ -67,6 +67,33 @@ class Moderation(commands.Cog):
         await member.remove_roles(nsfw_banned_role)
         await interaction.response.send_message(f"NSFW Unbanned {member.mention}")
 
+    @discord.app_commands.command(
+        name="say", description="Send a message to a channel."
+    )
+    @discord.app_commands.checks.has_any_role(1101868829317013647, 1101868829296054320)
+    @discord.app_commands.describe(
+        message="Message to send.",
+        channel="What channel do you want to send the message to?",
+    )
+    async def say(
+        self,
+        interaction: discord.Interaction,
+        message: str,
+        channel: discord.TextChannel = None,
+    ):
+        if channel is None:
+            await interaction.response.send_message("Sent", ephemeral=True)
+            return await interaction.channel.send(message)
+        await interaction.guild.get_channel(channel.id).send(message)
+        await interaction.response.send_message("Sent", ephemeral=True)
+
+    @say.error
+    async def say_error(self, interaction: discord.Interaction, error):
+        if isinstance(error, discord.app_commands.errors.MissingAnyRole):
+            return await interaction.response.send_message(error)
+        else:
+            print(error)
+
 
 async def setup(self: commands.Bot):
     await self.add_cog(Moderation(self))
