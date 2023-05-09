@@ -232,25 +232,6 @@ class Shields(commands.Cog):
             f"Successfully unequipped {role_data['name']}.", ephemeral=True
         )
 
-    @discord.app_commands.command(
-        name="leaderboard", description="See the leaderboard of Shields."
-    )
-    async def leaderboard(self, interaction: discord.Interaction):
-        await interaction.response.defer()
-        db = get_database()["Shields"]
-        top_10 = db.find().sort("Shields", pymongo.DESCENDING).limit(10)
-        d = ""
-        i = 1
-        for player in top_10:
-            d += f"{i}-) {interaction.guild.get_member(player['_id']).name}: {player['Shields']}<:Shields_SM:1104809716460310549>\n"
-            i += 1
-        embed = discord.Embed(
-            title="Top 10 Shield Havers",
-            description=d,
-            color=discord.Color.purple(),
-        )
-        await interaction.followup.send(embed=embed)
-
 
 async def setup(self: commands.Bot):
     await self.add_cog(Shields(self))
