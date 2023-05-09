@@ -31,7 +31,8 @@ class Owner(commands.Cog):
             value="Rules for when creating also applies here.",
         )
         embed.set_footer(
-            text="Only available for nitro boosters.", icon_url=ctx.me.avatar.url
+            text="Only available for nitro boosters and millionaires.",
+            icon_url=ctx.me.avatar.url,
         )
         await ctx.send(embed=embed, view=RoleMenuSetupButtons())
 
