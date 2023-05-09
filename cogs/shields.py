@@ -55,7 +55,7 @@ class Shields(commands.Cog):
         "custom": {
             "_id": 1105238296197595187,
             "name": "Custom Role of your choice.",
-            "price": 1000000000,
+            "price": 1000000,
             "code": "custom",
         },
     }
