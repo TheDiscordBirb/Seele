@@ -46,6 +46,13 @@ class Events(commands.Cog):
         if (
             message.author.bot
             or message.author == self.bot.user
+            or message.channel.id
+            in [
+                1103879081273073674,
+                1103879350719356948,
+                1105189907166662686,
+                1102599564705411142,
+            ]
             # or message.guild.get_role(1101868829317013647) not in message.author.roles
         ):
             return
