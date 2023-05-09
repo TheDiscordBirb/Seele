@@ -17,20 +17,24 @@ class RoleMenuSetupButtons(discord.ui.View):
         nitro_role = interaction.guild.get_role(1102939433038254091)
         aeon = interaction.guild.get_role(1101868829317013647)
         wildfire = interaction.guild.get_role(1101868829296054320)
+        key = interaction.guild.get_role(1105238296197595187)
 
         player = vanity_roles.find_one({"_id": interaction.user.id})
         if player:
             return await interaction.response.send_message(
                 "You already have a custom role.", ephemeral=True
             )
-        if any(role in interaction.user.roles for role in [nitro_role, aeon, wildfire]):
+        if any(
+            role in interaction.user.roles for role in [nitro_role, aeon, wildfire, key]
+        ):
             return await interaction.response.send_modal(
                 RoleMenuSetup(title="Role Setup")
             )
 
         else:
             return await interaction.response.send_message(
-                "Only nitro boosters can use this feature.", ephemeral=True
+                "Only nitro boosters and millionaires can use this feature.",
+                ephemeral=True,
             )
 
     @discord.ui.button(

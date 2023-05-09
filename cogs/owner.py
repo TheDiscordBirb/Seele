@@ -14,12 +14,12 @@ class Owner(commands.Cog):
         embed = discord.Embed(
             color=discord.Color.purple(),
             title="Vanity Role Menu",
-            description="Here you can create/delete/edit your vanity role.",
+            description="Here you can create/delete/edit your vanity role.\nRole icon is optional and role color does not require the #, just input the value.",
         )
         embed.add_field(
             name="Creating",
-            value="You'll enter the role name, color in hexadecimal format and the icon url which is an "
-            "image url.",
+            value="You'll enter the role name, color in hexadecimal format (without the #) and the icon url which is an "
+            "image url. (make sure the image link ends with .png for transparent roles)",
         )
         embed.add_field(
             name="Deleting",
@@ -28,8 +28,7 @@ class Owner(commands.Cog):
         )
         embed.add_field(
             name="Editing",
-            value="For now, you don't have the option to leave blank or set to none, please fill in what "
-            "your current role name/color/icon is if you don't want to change it.",
+            value="Rules for when creating also applies here.",
         )
         embed.set_footer(
             text="Only available for nitro boosters.", icon_url=ctx.me.avatar.url
