@@ -1,9 +1,12 @@
 import datetime as time
+import random
+from typing import Optional
 
 import discord
 import humanize
 from discord.ext import commands
 from pymongo import ReturnDocument
+import pymongo
 
 from mongo import get_database
 
@@ -67,6 +70,7 @@ class Shields(commands.Cog):
         name="balance", description="Check your Shield balance."
     )
     async def balance(self, interaction: discord.Interaction):
+        await interaction.response.defer()
         shields = get_database()["Shields"]
         player = shields.find_one({"_id": interaction.user.id})
         if player is None:
@@ -76,48 +80,19 @@ class Shields(commands.Cog):
                 upsert=True,
                 return_document=ReturnDocument.AFTER,
             )
-            await interaction.response.send_message(
+            await interaction.followup.send(
                 f"You currently have {humanize.intcomma(player.get('Shields', 0))}<:Shields_SM:1104809716460310549>."
             )
         else:
-            await interaction.response.send_message(
+            await interaction.followup.send(
                 f"You currently have {humanize.intcomma(player.get('Shields', 0))}<:Shields_SM:1104809716460310549>."
             )
-
-    @discord.app_commands.command(name="daily", description="Claim your daily shields.")
-    @discord.app_commands.checks.cooldown(1, 86400)
-    async def daily(self, interaction: discord.Interaction):
-        db = get_database()
-        shields = db["Shields"]
-        player = shields.find_one_and_update(
-            {"_id": interaction.user.id},
-            {"$inc": {"Shields": 100}, "$setOnInsert": {"inventory": []}},
-            upsert=True,
-            return_document=ReturnDocument.AFTER,
-        )
-
-        await interaction.response.send_message(
-            f"You claimed your daily 100<:Shields_SM:1104809716460310549>.\n"
-            f"New Balance: {humanize.intcomma(player.get('Shields', 0))}<:Shields_SM:1104809716460310549>"
-        )
-
-    @daily.error
-    async def daily_error(self, interaction: discord.Interaction, error):
-        if isinstance(error, discord.app_commands.errors.CommandOnCooldown):
-            delta = time.timedelta(seconds=error.retry_after)
-            remaining_cooldown = humanize.precisedelta(delta)
-
-            await interaction.response.send_message(
-                f"Try again in {remaining_cooldown}",
-                ephemeral=True,
-            )
-        else:
-            print(error)
 
     @discord.app_commands.command(
         name="shop", description="A shop containing various roles."
     )
     async def shop(self, interaction: discord.Interaction):
+        await interaction.response.defer()
         embed = discord.Embed(title="Role Shop", color=discord.Color.purple())
         for role in self.role_shop.values():
             embed.add_field(
@@ -125,17 +100,18 @@ class Shields(commands.Cog):
                 value=f"{humanize.intcomma(role.get('price', 0))}<:Shields_SM:1104809716460310549> code: `{role['code']}`\nPreview: {interaction.guild.get_role(role['_id']).mention}",
                 inline=False,
             )
-        await interaction.response.send_message(embed=embed)
+        await interaction.followup.send(embed=embed)
 
     @discord.app_commands.command(
         name="inventory", description="Shows what you have in your inventory."
     )
     async def inventory(self, interaction: discord.Interaction):
+        await interaction.response.defer()
         shields = get_database()["Shields"]
         player = shields.find_one({"_id": interaction.user.id})
 
         if not player or not player["inventory"]:
-            return await interaction.response.send_message(
+            return await interaction.followup.send(
                 "Your inventory is empty.", ephemeral=True
             )
 
@@ -149,20 +125,21 @@ class Shields(commands.Cog):
                         value=f"code: `{value['code']}`\nPreview: {interaction.guild.get_role(value['_id']).mention}",
                     )
 
-        await interaction.response.send_message(embed=embed)
+        await interaction.followup.send(embed=embed)
 
     @discord.app_commands.command(
         name="buy", description="Buy out a role from the shop."
     )
     @discord.app_commands.describe(code="The code of the role you want to buy.")
     async def buy(self, interaction: discord.Interaction, code: str):
+        await interaction.response.defer()
         db = get_database()
         shields = db["Shields"]
         role = self.role_shop.get(code)
         player = shields.find_one({"_id": interaction.user.id})
 
         if not role:
-            return await interaction.response.send_message(
+            return await interaction.followup.send(
                 f"Please input correct role code.", ephemeral=True
             )
 
@@ -172,12 +149,12 @@ class Shields(commands.Cog):
             if any(role in data for role in self.role_shop)
         ]
         if inventory:
-            return await interaction.response.send_message(
+            return await interaction.followup.send(
                 f"You already own {role['name']}.", ephemeral=True
             )
 
         if player["Shields"] < role["price"]:
-            return await interaction.response.send_message(
+            return await interaction.followup.send(
                 f"You can't afford {role['name']}.", ephemeral=True
             )
 
@@ -189,7 +166,7 @@ class Shields(commands.Cog):
             },
         )
 
-        await interaction.response.send_message(
+        await interaction.followup.send(
             f"You've purchased {role['name']} for {humanize.intcomma(role.get('price', 0))}<:Shields_SM:1104809716460310549>.",
             ephemeral=True,
         )
@@ -197,9 +174,10 @@ class Shields(commands.Cog):
     @discord.app_commands.command(name="equip", description="Equip a role you own.")
     @discord.app_commands.describe(code="The code of the role you want to equip.")
     async def equip(self, interaction: discord.Interaction, code: str):
+        await interaction.response.defer()
         role_data = self.role_shop.get(code)
         if not role_data:
-            return await interaction.response.send_message(
+            return await interaction.followup.send(
                 f"Please input correct role code.", ephemeral=True
             )
         db = get_database()
@@ -208,30 +186,31 @@ class Shields(commands.Cog):
 
         has_role = any(role[code]["code"] == code for role in player["inventory"])
         if not has_role:
-            return await interaction.response.send_message(
+            return await interaction.followup.send(
                 f"You don't have {role_data['name']}.", ephemeral=True
             )
         role = discord.utils.get(interaction.guild.roles, id=role_data["_id"])
         if role.id == 1105238296197595187:
-            return await interaction.response.send_message(
+            return await interaction.followup.send(
                 "Please ping a staff member to redeem your custom role of your choice.",
                 ephemeral=True,
             )
         if role in interaction.user.roles:
-            return await interaction.response.send_message(
+            return await interaction.followup.send(
                 f"You already have {role.name} equipped.", ephemeral=True
             )
         await interaction.user.add_roles(role)
-        return await interaction.response.send_message(
+        await interaction.followup.send(
             f"Successfully equipped {role_data['name']}.", ephemeral=True
         )
 
     @discord.app_commands.command(name="unequip", description="Unequip a role you own.")
     @discord.app_commands.describe(code="The code of the role you want to unequip.")
     async def unequip(self, interaction: discord.Interaction, code: str):
+        await interaction.response.defer()
         role_data = self.role_shop.get(code)
         if not role_data:
-            return await interaction.response.send_message(
+            return await interaction.followup.send(
                 "Please input correct role code.", ephemeral=True
             )
         db = get_database()
@@ -240,18 +219,37 @@ class Shields(commands.Cog):
 
         has_role = any(role[code]["code"] == code for role in player["inventory"])
         if not has_role:
-            return await interaction.response.send_message(
+            return await interaction.followup.send(
                 f"You don't have {role_data['name']}.", ephemeral=True
             )
         role = discord.utils.get(interaction.guild.roles, id=role_data["_id"])
         if role not in interaction.user.roles:
-            return await interaction.response.send_message(
+            return await interaction.followup.send(
                 f"You don't have {role.name} equipped.", ephemeral=True
             )
         await interaction.user.remove_roles(role)
-        return await interaction.response.send_message(
+        return await interaction.followup.send(
             f"Successfully unequipped {role_data['name']}.", ephemeral=True
         )
+
+    @discord.app_commands.command(
+        name="leaderboard", description="See the leaderboard of Shields."
+    )
+    async def leaderboard(self, interaction: discord.Interaction):
+        await interaction.response.defer()
+        db = get_database()["Shields"]
+        top_10 = db.find().sort("Shields", pymongo.DESCENDING).limit(10)
+        d = ""
+        i = 1
+        for player in top_10:
+            d += f"{i}-) {interaction.guild.get_member(player['_id']).name}: {player['Shields']}<:Shields_SM:1104809716460310549>\n"
+            i += 1
+        embed = discord.Embed(
+            title="Top 10 Shield Havers",
+            description=d,
+            color=discord.Color.purple(),
+        )
+        await interaction.followup.send(embed=embed)
 
 
 async def setup(self: commands.Bot):
