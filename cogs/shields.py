@@ -52,6 +52,12 @@ class Shields(commands.Cog):
             "price": 100000,
             "code": "leader",
         },
+        "custom": {
+            "_id": 1105238296197595187,
+            "name": "Custom Role of your choice.",
+            "price": 1000000000,
+            "code": "custom",
+        },
     }
 
     def __init__(self, bot: commands.Bot):
@@ -71,11 +77,11 @@ class Shields(commands.Cog):
                 return_document=ReturnDocument.AFTER,
             )
             await interaction.response.send_message(
-                f"You currently have {player['Shields']}<:Shields_SM:1104809716460310549>."
+                f"You currently have {humanize.intcomma(player.get('Shields', 0))}<:Shields_SM:1104809716460310549>."
             )
         else:
             await interaction.response.send_message(
-                f"You currently have {player['Shields']}<:Shields_SM:1104809716460310549>."
+                f"You currently have {humanize.intcomma(player.get('Shields', 0))}<:Shields_SM:1104809716460310549>."
             )
 
     @discord.app_commands.command(name="daily", description="Claim your daily shields.")
@@ -92,7 +98,7 @@ class Shields(commands.Cog):
 
         await interaction.response.send_message(
             f"You claimed your daily 100<:Shields_SM:1104809716460310549>.\n"
-            f"New Balance: {player['Shields']}<:Shields_SM:1104809716460310549>"
+            f"New Balance: {humanize.intcomma(player.get('Shields', 0))}<:Shields_SM:1104809716460310549>"
         )
 
     @daily.error
@@ -116,7 +122,7 @@ class Shields(commands.Cog):
         for role in self.role_shop.values():
             embed.add_field(
                 name=f"{role['name']}",
-                value=f"{role['price']}<:Shields_SM:1104809716460310549> code: `{role['code']}`\nPreview: {interaction.guild.get_role(role['_id']).mention}",
+                value=f"{humanize.intcomma(role.get('price', 0))}<:Shields_SM:1104809716460310549> code: `{role['code']}`\nPreview: {interaction.guild.get_role(role['_id']).mention}",
                 inline=False,
             )
         await interaction.response.send_message(embed=embed)
@@ -163,7 +169,7 @@ class Shields(commands.Cog):
         inventory = [
             data
             for data in player["inventory"]
-            if any(k in data for k in self.role_shop)
+            if any(role in data for role in self.role_shop)
         ]
         if inventory:
             return await interaction.response.send_message(
@@ -184,7 +190,7 @@ class Shields(commands.Cog):
         )
 
         await interaction.response.send_message(
-            f"You've purchased {role['name']} for {role['price']}<:Shields_SM:1104809716460310549>."
+            f"You've purchased {role['name']} for {humanize.intcomma(role.get('price', 0))}<:Shields_SM:1104809716460310549>."
         )
 
     @discord.app_commands.command(name="equip", description="Equip a role you own.")
@@ -205,6 +211,11 @@ class Shields(commands.Cog):
                 f"You don't have {role_data['name']}.", ephemeral=True
             )
         role = discord.utils.get(interaction.guild.roles, id=role_data["_id"])
+        if role.id == 1105238296197595187:
+            return await interaction.response.send_message(
+                "Please ping a staff member to redeem your custom role of your choice.",
+                ephemeral=True,
+            )
         if role in interaction.user.roles:
             return await interaction.response.send_message(
                 f"You already have {role.name} equipped.", ephemeral=True
@@ -212,6 +223,33 @@ class Shields(commands.Cog):
         await interaction.user.add_roles(role)
         return await interaction.response.send_message(
             f"Successfully equipped {role_data['name']}.", ephemeral=True
+        )
+
+    @discord.app_commands.command(name="unequip", description="Unequip a role you own.")
+    @discord.app_commands.describe(code="The code of the role you want to unequip.")
+    async def unequip(self, interaction: discord.Interaction, code: str):
+        role_data = self.role_shop.get(code)
+        if not role_data:
+            return await interaction.response.send_message(
+                "Please input correct role code.", ephemeral=True
+            )
+        db = get_database()
+        shields = db["Shields"]
+        player = shields.find_one({"_id": interaction.user.id})
+
+        has_role = any(role[code]["code"] == code for role in player["inventory"])
+        if not has_role:
+            return await interaction.response.send_message(
+                f"You don't have {role_data['name']}.", ephemeral=True
+            )
+        role = discord.utils.get(interaction.guild.roles, id=role_data["_id"])
+        if role not in interaction.user.roles:
+            return await interaction.response.send_message(
+                f"You don't have {role.name} equipped.", ephemeral=True
+            )
+        await interaction.user.remove_roles(role)
+        return await interaction.response.send_message(
+            f"Successfully unequipped {role_data['name']}.", ephemeral=True
         )
 
 
