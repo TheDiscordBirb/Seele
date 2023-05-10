@@ -41,7 +41,7 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
-        return  # todo Enable on launch.
+        pass  # todo Enable on launch.
         # db = get_database()
         # shields = db["Shields"]
         # if (
