@@ -41,8 +41,8 @@ class Moderation(commands.Cog):
     async def nsfw_ban_error(self, interaction: discord.Interaction, error):
         if isinstance(error, discord.app_commands.errors.MissingAnyRole):
             return await interaction.response.send_message(error)
-        else:
-            print(error)
+        await interaction.response.send_message("An error occurred! Please try again.")
+        print(error)
 
     @discord.app_commands.command(
         name="nsfw-unban", description="NSFW Unban the given member."
@@ -91,8 +91,8 @@ class Moderation(commands.Cog):
     async def say_error(self, interaction: discord.Interaction, error):
         if isinstance(error, discord.app_commands.errors.MissingAnyRole):
             return await interaction.response.send_message(error)
-        else:
-            print(error)
+        await interaction.response.send_message("An error occurred! Please try again.")
+        print(error)
 
 
 async def setup(self: commands.Bot):

@@ -19,8 +19,7 @@ class RoleMenuSetupButtons(discord.ui.View):
         wildfire = interaction.guild.get_role(1101868829296054320)
         key = interaction.guild.get_role(1105238296197595187)
 
-        player = vanity_roles.find_one({"_id": interaction.user.id})
-        if player:
+        if player := vanity_roles.find_one({"_id": interaction.user.id}):
             return await interaction.response.send_message(
                 "You already have a custom role.", ephemeral=True
             )
@@ -45,9 +44,7 @@ class RoleMenuSetupButtons(discord.ui.View):
     ):
         db = get_database()
         vanity_roles = db["Vanity Roles"]
-        player = vanity_roles.find_one({"_id": interaction.user.id})
-
-        if player:
+        if player := vanity_roles.find_one({"_id": interaction.user.id}):
             role = discord.utils.get(interaction.guild.roles, id=player["role_id"])
             await role.delete()
             vanity_roles.delete_one({"_id": interaction.user.id})

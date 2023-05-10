@@ -27,7 +27,6 @@ class RoleMenuSetup(discord.ui.Modal):
                 color=discord.Color.from_str(f"#{self.color.value}"),
                 display_icon=None,
             )
-            await role.edit(position=parent_role.position - 1)
         else:
             r = requests.get(self.icon.value)
             if r.ok:
@@ -38,8 +37,7 @@ class RoleMenuSetup(discord.ui.Modal):
                     color=discord.Color.from_str(f"#{self.color.value}"),
                     display_icon=b,
                 )
-            await role.edit(position=parent_role.position - 1)
-
+        await role.edit(position=parent_role.position - 1)
         vanity_roles.insert_one(
             {
                 "_id": interaction.user.id,
@@ -68,8 +66,7 @@ class EditRoleModal(discord.ui.Modal):
         clr = discord.Color.from_str(f"#{self.color.value}")
 
         player = vanity_roles.find_one({"_id": interaction.user.id})
-        role_id = player.get("role_id")
-        if role_id:
+        if role_id := player.get("role_id"):
             role = discord.utils.get(interaction.guild.roles, id=role_id)
             img = None
             if self.icon.value == "":

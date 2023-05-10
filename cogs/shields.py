@@ -1,12 +1,7 @@
-import datetime as time
-import random
-from typing import Optional
-
 import discord
 import humanize
 from discord.ext import commands
 from pymongo import ReturnDocument
-import pymongo
 
 from mongo import get_database
 
@@ -16,49 +11,49 @@ class Shields(commands.Cog):
         "fly": {
             "_id": 1105147030390702150,
             "name": "Seele's Butterfly",
-            "price": 1000,
+            "price": 10000,
             "code": "fly",
         },
         "bf": {
             "_id": 1105147040159236096,
             "name": "Seele's BF",
-            "price": 5000,
+            "price": 25000,
             "code": "bf",
         },
         "gf": {
             "_id": 1105147075571752961,
             "name": "Seele's GF",
-            "price": 5000,
+            "price": 25000,
             "code": "gf",
         },
         "husband": {
             "_id": 1105147078629412904,
             "name": "Seele's Husband",
-            "price": 15000,
+            "price": 50000,
             "code": "husband",
         },
         "wife": {
             "_id": 1105147080936280145,
             "name": "Seele's Wife",
-            "price": 15000,
+            "price": 50000,
             "code": "wife",
         },
         "wq": {
             "_id": 1105147083830337556,
             "name": "Wildfire Queen",
-            "price": 50000,
+            "price": 250000,
             "code": "wq",
         },
         "leader": {
             "_id": 1105147086200119418,
             "name": "Underworld Leader",
-            "price": 100000,
+            "price": 500000,
             "code": "leader",
         },
         "custom": {
             "_id": 1105238296197595187,
             "name": "Custom Role of your choice.",
-            "price": 1000000,
+            "price": 10000000,
             "code": "custom",
         },
     }
@@ -80,13 +75,9 @@ class Shields(commands.Cog):
                 upsert=True,
                 return_document=ReturnDocument.AFTER,
             )
-            await interaction.followup.send(
-                f"You currently have {humanize.intcomma(player.get('Shields', 0))}<:Shields_SM:1104809716460310549>."
-            )
-        else:
-            await interaction.followup.send(
-                f"You currently have {humanize.intcomma(player.get('Shields', 0))}<:Shields_SM:1104809716460310549>."
-            )
+        await interaction.followup.send(
+            f"You currently have {humanize.intcomma(player.get('Shields', 0))}<:Shields_SM:1104809716460310549>."
+        )
 
     @discord.app_commands.command(
         name="shop", description="A shop containing various roles."
@@ -140,15 +131,14 @@ class Shields(commands.Cog):
 
         if not role:
             return await interaction.followup.send(
-                f"Please input correct role code.", ephemeral=True
+                "Please input correct role code.", ephemeral=True
             )
 
-        inventory = [
+        if inventory := [
             data
             for data in player["inventory"]
             if any(role in data for role in self.role_shop)
-        ]
-        if inventory:
+        ]:
             return await interaction.followup.send(
                 f"You already own {role['name']}.", ephemeral=True
             )
@@ -178,7 +168,7 @@ class Shields(commands.Cog):
         role_data = self.role_shop.get(code)
         if not role_data:
             return await interaction.followup.send(
-                f"Please input correct role code.", ephemeral=True
+                "Please input correct role code.", ephemeral=True
             )
         db = get_database()
         shields = db["Shields"]

@@ -53,7 +53,7 @@ class Events(commands.Cog):
                 1105189907166662686,
                 1102599564705411142,
             ]
-            or message.guild.get_role(1101868829317013647) not in message.author.roles
+            or message.guild.get_role(1102951068599590912) not in message.author.roles
         ):
             return
 
