@@ -171,8 +171,7 @@ class Economy(commands.Cog):
         shields = db["Shields"]
         player = shields.find_one({"_id": ctx.author.id})
 
-        has_role = any(role[code]["code"] ==
-                       code for role in player["inventory"])
+        has_role = any(role[code]["code"] == code for role in player["inventory"])
         if not has_role:
             return await ctx.reply(
                 f"You don't have {role_data['name']}.", ephemeral=True
@@ -203,8 +202,7 @@ class Economy(commands.Cog):
         shields = db["Shields"]
         player = shields.find_one({"_id": ctx.author.id})
 
-        has_role = any(role[code]["code"] ==
-                       code for role in player["inventory"])
+        has_role = any(role[code]["code"] == code for role in player["inventory"])
         if not has_role:
             return await ctx.reply(
                 f"You don't have {role_data['name']}.", ephemeral=True
@@ -226,13 +224,14 @@ class Economy(commands.Cog):
     async def daily(self, ctx: commands.Context):
         db = get_database()["Shields"]
         daily_earnings = 200
-        player = db.find_one_and_update(
+        member_roles = [role.id for role in ctx.author.roles]
+        multiplier = 1.6 if 1102939433038254091 in member_roles else 1
+        db.find_one_and_update(
             {"_id": ctx.author.id},
-            {"$inc": {"Shields": daily_earnings}},
-            return_document=ReturnDocument.AFTER,
+            {"$inc": {"Shields": daily_earnings * multiplier}},
         )
         await ctx.reply(
-            f"You've redeemed your daily {daily_earnings}<:Shields_SM:1104809716460310549>\n"
+            f"You've redeemed your daily {math.floor(daily_earnings * multiplier)}<:Shields_SM:1104809716460310549>\n"
         )
 
     @daily.error
@@ -264,14 +263,18 @@ class Economy(commands.Cog):
             "Hey, you're about to fall asleep on your feet. Don't push yourself — I got this. Go get some rest. Earned {}",
             "Way to go! You're a valuable asset to Boulder Town's economy! You earned {}",
         ]
+        member_roles = [role.id for role in ctx.author.roles]
+        multiplier = 1.6 if 1102939433038254091 in member_roles else 1
         db.find_one_and_update(
             {"_id": ctx.author.id},
-            {"$inc": {"Shields": earnings}},
+            {"$inc": {"Shields": earnings * multiplier}},
             return_document=ReturnDocument.AFTER,
         )
         response = random.choice(responses)
         reply = response.replace(
-            "{}", f"{earnings}<:Shields_SM:1104809716460310549>")
+            "{}",
+            f"{math.floor(earnings * multiplier)}<:Shields_SM:1104809716460310549>",
+        )
         await ctx.reply(reply)
 
     @work.error
@@ -319,13 +322,12 @@ class Economy(commands.Cog):
         shields_multiplier = 2 if chance else -1
 
         db.find_one_and_update(
-            {"_id": ctx.author.id}, {
-                "$inc": {"Shields": amount * shields_multiplier}}
+            {"_id": ctx.author.id}, {"$inc": {"Shields": amount * shields_multiplier}}
         )
 
         if chance:
             await ctx.reply(
-                f"You won the bet, earned {amount * 2}<:Shields_SM:1104809716460310549>!"
+                f"You won the bet, earned {amount * shields_multiplier}<:Shields_SM:1104809716460310549>!"
             )
         else:
             await ctx.reply("You lost the bet.")

@@ -7,10 +7,19 @@ class Moderation(commands.Cog):
         super().__init__()
         self.bot = bot
 
-    @discord.app_commands.command(name="nsfw-ban", description='Ban someone from viewing NSFW.')
+    @discord.app_commands.command(
+        name="nsfw-ban", description="Ban someone from viewing NSFW."
+    )
     @discord.app_commands.checks.has_any_role(1101868829317013647, 1101868829296054320)
-    @discord.app_commands.describe(member='The member you want to ban.', reason='Optional, reason for the ban.')
-    async def nsfw_ban(self, interaction: discord.Interaction, member: discord.Member, reason: str = None):
+    @discord.app_commands.describe(
+        member="The member you want to ban.", reason="Optional, reason for the ban."
+    )
+    async def nsfw_ban(
+        self,
+        interaction: discord.Interaction,
+        member: discord.Member,
+        reason: str = None,
+    ):
         await interaction.response.defer(thinking=True)
         member = interaction.guild.get_member(member.id)
         ban_reason = reason if reason is not None else "Reason not provided."
@@ -19,24 +28,36 @@ class Moderation(commands.Cog):
         if not member:
             return await interaction.followup.send("Invalid member.")
         if nsfw_banned_role in member.roles:
-            return await interaction.followup.send(f"{member.mention} is already NSFW Banned.")
+            return await interaction.followup.send(
+                f"{member.mention} is already NSFW Banned."
+            )
         await member.remove_roles(nsfw_access_role)
         await member.add_roles(nsfw_banned_role)
         await member.send(
             f"You've been NSFW Banned in **{interaction.guild.name}**\nReason: {ban_reason}"
         )
-        await interaction.followup.send(f"NSFW Banned {member.mention}", ephemeral=False)
+        await interaction.followup.send(
+            f"NSFW Banned {member.mention}", ephemeral=False
+        )
 
     @nsfw_ban.error
-    async def nsfw_ban_error(self, interaction: discord.Interaction, error: discord.app_commands.AppCommandError):
+    async def nsfw_ban_error(
+        self,
+        interaction: discord.Interaction,
+        error: discord.app_commands.AppCommandError,
+    ):
         if isinstance(error, discord.app_commands.MissingAnyRole):
             return await interaction.response.send_message(error, ephemeral=True)
         await interaction.response.send_message(error, ephemeral=True)
 
-    @discord.app_commands.command(name="nsfw-unban", description='Unban someone from NSFW.')
+    @discord.app_commands.command(
+        name="nsfw-unban", description="Unban someone from NSFW."
+    )
     @discord.app_commands.checks.has_any_role(1101868829317013647, 1101868829296054320)
-    @discord.app_commands.describe(member='The member you want to unban.')
-    async def nsfw_unban(self, interaction: discord.Interaction, member: discord.Member):
+    @discord.app_commands.describe(member="The member you want to unban.")
+    async def nsfw_unban(
+        self, interaction: discord.Interaction, member: discord.Member
+    ):
         await interaction.response.defer(thinking=True)
         member = interaction.guild.get_member(member.id)
         nsfw_banned_role = interaction.guild.get_role(1105208057417445386)
@@ -44,10 +65,14 @@ class Moderation(commands.Cog):
         if not member:
             return await interaction.followup.send("Invalid member.")
         if nsfw_banned_role not in member.roles:
-            return await interaction.followup.send(f"{member.mention} is not NSFW Banned.")
+            return await interaction.followup.send(
+                f"{member.mention} is not NSFW Banned."
+            )
         await member.add_roles(nsfw_access_role)
         await member.remove_roles(nsfw_banned_role)
-        await interaction.followup.send(f"NSFW Unbanned {member.mention}", ephemeral=False)
+        await interaction.followup.send(
+            f"NSFW Unbanned {member.mention}", ephemeral=False
+        )
 
     @nsfw_unban.error
     async def nsfw_unban_error(self, interaction: discord.Interaction, error):
@@ -55,10 +80,19 @@ class Moderation(commands.Cog):
             return await interaction.response.send_message(error, ephemeral=True)
         await interaction.response.send_message(error, ephemeral=True)
 
-    @discord.app_commands.command(name="say", description="Repeat a message in a given channel.")
+    @discord.app_commands.command(
+        name="say", description="Repeat a message in a given channel."
+    )
     @discord.app_commands.checks.has_any_role(1101868829317013647, 1101868829296054320)
-    @discord.app_commands.describe(message='Message to repeat.', channel='Channel to repeat at.')
-    async def say(self, interaction: discord.Interaction, message: str, channel: discord.TextChannel = None):
+    @discord.app_commands.describe(
+        message="Message to repeat.", channel="Channel to repeat at."
+    )
+    async def say(
+        self,
+        interaction: discord.Interaction,
+        message: str,
+        channel: discord.TextChannel = None,
+    ):
         await interaction.response.defer(ephemeral=True)
         if channel:
             await interaction.followup.send("Sent.")
@@ -68,7 +102,9 @@ class Moderation(commands.Cog):
             await interaction.channel.send(message)
 
     @say.error
-    async def say_error(self, interaction: discord.Interaction, error: commands.CommandError):
+    async def say_error(
+        self, interaction: discord.Interaction, error: commands.CommandError
+    ):
         if isinstance(error, commands.errors.MissingAnyRole):
             return await interaction.response.send_message(error, ephemeral=True)
         await interaction.response.send_message(error, ephemeral=True)

@@ -40,8 +40,7 @@ Seele = Seele()
 # Context menus goes here
 @Seele.tree.context_menu(name="Avatar")
 async def avatar(interaction: discord.Interaction, member: discord.Member):
-    embed = discord.Embed(color=discord.Color.random(),
-                          title=f"{member.name}'s Avatar")
+    embed = discord.Embed(color=discord.Color.random(), title=f"{member.name}'s Avatar")
     embed.set_image(url=member.avatar.url)
     await interaction.response.send_message(embed=embed)
 

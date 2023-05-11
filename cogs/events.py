@@ -41,47 +41,46 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
-        pass  # todo Enable on launch.
-        # db = get_database()
-        # shields = db["Shields"]
-        # if (
-        #     message.author.bot
-        #     or message.author == self.bot.user
-        #     or message.channel.id
-        #     in [
-        #         1103879081273073674,
-        #         1103879350719356948,
-        #         1105189907166662686,
-        #         1102599564705411142,
-        #     ]
-        # ):
-        #     return
+        db = get_database()
+        shields = db["Shields"]
+        if (
+            message.author.bot
+            or message.author == self.bot.user
+            or message.channel.id
+            in [
+                1103879081273073674,
+                1103879350719356948,
+                1105189907166662686,
+                1102599564705411142,
+            ]
+        ):
+            return
 
-        # if message.author.id in self.cooldowns:
-        #     remaining_time = (
-        #         self.cooldowns[message.author.id] - message.created_at.timestamp()
-        #     )
-        #     if remaining_time > 0:
-        #         return
-        # self.cooldowns[message.author.id] = message.created_at.timestamp() + 20
-        # player = shields.find_one({"_id": message.author.id})
-        # if player is not None:
-        #     member = message.guild.get_member(message.author.id)
-        #     nitro_role = message.guild.get_role(1102939433038254091)
-        #     if nitro_role in member.roles:
-        #         shields.find_one_and_update(
-        #             {"_id": message.author.id},
-        #             {"$inc": {"Shields": 8}},
-        #         )
-        #     else:
-        #         shields.find_one_and_update(
-        #             {"_id": message.author.id},
-        #             {"$inc": {"Shields": 5}},
-        #         )
-        # else:
-        #     shields.insert_one(
-        #         {"_id": message.author.id, "Shields": 5, "inventory": []}
-        #     )
+        if message.author.id in self.cooldowns:
+            remaining_time = (
+                self.cooldowns[message.author.id] - message.created_at.timestamp()
+            )
+            if remaining_time > 0:
+                return
+        self.cooldowns[message.author.id] = message.created_at.timestamp() + 20
+        player = shields.find_one({"_id": message.author.id})
+        if player is not None:
+            member = message.guild.get_member(message.author.id)
+            nitro_role = message.guild.get_role(1102939433038254091)
+            if nitro_role in member.roles:
+                shields.find_one_and_update(
+                    {"_id": message.author.id},
+                    {"$inc": {"Shields": 8}},
+                )
+            else:
+                shields.find_one_and_update(
+                    {"_id": message.author.id},
+                    {"$inc": {"Shields": 5}},
+                )
+        else:
+            shields.insert_one(
+                {"_id": message.author.id, "Shields": 5, "inventory": []}
+            )
 
 
 async def setup(self: commands.Bot):
