@@ -86,7 +86,7 @@ class Economy(commands.Cog):
                 return_document=ReturnDocument.AFTER,
             )
         await ctx.reply(
-            f"You currently have {humanize.intcomma(player.get('Shields', 0))}<:Shields_SM:1104809716460310549>."
+            f"You currently have {humanize.intcomma(math.floor(player.get('Shields', 0)))}<:Shields_SM:1104809716460310549>."
         )
 
     @commands.command(
