@@ -234,7 +234,8 @@ class Economy(commands.Cog):
         multiplier = 1.6 if 1102939433038254091 in member_roles else 1
         db.find_one_and_update(
             {"_id": ctx.author.id},
-            {"$inc": {"Shields": daily_earnings * multiplier}},
+            {"$inc": {"Shields": math.floor(daily_earnings * multiplier)}},
+            upsert=True,
         )
         await ctx.reply(
             f"You've redeemed your daily {math.floor(daily_earnings * multiplier)}<:Shields_SM:1104809716460310549>\n"
