@@ -8,6 +8,12 @@ import datetime
 from mongo import get_database
 
 
+def gamba_cooldown(ctx: commands.Context):
+    if 1102939433038254091 in ctx.author.roles:
+        return commands.Cooldown(5, 3600)
+    return commands.Cooldown(3, 3600)
+
+
 class Economy(commands.Cog):
     role_shop = {
         "fly": {
@@ -287,11 +293,6 @@ class Economy(commands.Cog):
             await ctx.reply(
                 f"You are tired of working.\nYou can start working again <t:{cooldown}:R>."
             )
-
-    def gamba_cooldown(self, ctx: commands.Context):
-        if 1102939433038254091 in ctx.author.roles:
-            return commands.Cooldown(5, 3600)
-        return commands.Cooldown(3, 3600)
 
     @commands.command(
         name="gamba",
