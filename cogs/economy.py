@@ -5,6 +5,8 @@ import humanize
 from discord.ext import commands
 from pymongo import ReturnDocument
 import datetime
+
+import pymongo
 from mongo import get_database
 
 
@@ -222,6 +224,29 @@ class Economy(commands.Cog):
         return await ctx.reply(
             f"Successfully unequipped {role_data['name']}.", ephemeral=True
         )
+
+    @commands.command(
+        name="leaderboard",
+        aliases=["lb"],
+        usage="leaderboard",
+        description="See leaderboard of the most shields owned.",
+    )
+    @commands.guild_only()
+    async def leaderboard(self, ctx: commands.Context):
+        db = get_database()["Shields"]
+
+        top_10 = db.find().sort("Shields", pymongo.DESCENDING).limit(10)
+
+        desc = "".join(
+            f"**{i}**-) {ctx.guild.get_member(shield['_id']).name}: {math.floor(shield['Shields'])}<:Shields_SM:1104809716460310549>\n"
+            for i, shield in enumerate(top_10, 1)
+        )
+        embed = discord.Embed(
+            title="Top 10 Shields [Current]",
+            description=desc,
+            color=discord.Color.purple(),
+        )
+        await ctx.send(embed=embed)
 
     @commands.command(
         name="daily", description="Claim your daily shields.", usage="daily"
