@@ -171,7 +171,8 @@ class Economy(commands.Cog):
         shields = db["Shields"]
         player = shields.find_one({"_id": ctx.author.id})
 
-        has_role = any(role[code]["code"] == code for role in player["inventory"])
+        has_role = any(role[code]["code"] ==
+                       code for role in player["inventory"])
         if not has_role:
             return await ctx.reply(
                 f"You don't have {role_data['name']}.", ephemeral=True
@@ -202,7 +203,8 @@ class Economy(commands.Cog):
         shields = db["Shields"]
         player = shields.find_one({"_id": ctx.author.id})
 
-        has_role = any(role[code]["code"] == code for role in player["inventory"])
+        has_role = any(role[code]["code"] ==
+                       code for role in player["inventory"])
         if not has_role:
             return await ctx.reply(
                 f"You don't have {role_data['name']}.", ephemeral=True
@@ -268,7 +270,8 @@ class Economy(commands.Cog):
             return_document=ReturnDocument.AFTER,
         )
         response = random.choice(responses)
-        reply = response.replace("{}", f"{earnings}<:Shields_SM:1104809716460310549>")
+        reply = response.replace(
+            "{}", f"{earnings}<:Shields_SM:1104809716460310549>")
         await ctx.reply(reply)
 
     @work.error
@@ -316,7 +319,8 @@ class Economy(commands.Cog):
         shields_multiplier = 2 if chance else -1
 
         db.find_one_and_update(
-            {"_id": ctx.author.id}, {"$inc": {"Shields": amount * shields_multiplier}}
+            {"_id": ctx.author.id}, {
+                "$inc": {"Shields": amount * shields_multiplier}}
         )
 
         if chance:
