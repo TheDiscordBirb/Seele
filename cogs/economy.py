@@ -325,6 +325,7 @@ class Economy(commands.Cog):
         name="gamba",
         description="Gamble your money in, win 2x or lose 1x.",
         usage="gamba (amount)",
+        enabled=False,
     )
     @commands.dynamic_cooldown(gamba_cooldown, commands.BucketType.user)
     async def gamba(self, ctx: commands.Context, amount: int = 10):
