@@ -347,7 +347,7 @@ class Economy(commands.Cog):
 
         chance = random.choice([True, False])
 
-        shields_multiplier = 2 if chance else -1
+        shields_multiplier = 1 if chance else -1
 
         db.find_one_and_update(
             {"_id": ctx.author.id}, {"$inc": {"Shields": amount * shields_multiplier}}
