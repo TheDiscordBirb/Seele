@@ -11,7 +11,8 @@ from mongo import get_database
 
 
 def gamba_cooldown(ctx: commands.Context):
-    if 1102939433038254091 in ctx.author.roles:
+    member_roles = [role.id for role in ctx.author.roles]
+    if 1102939433038254091 in member_roles:
         return commands.Cooldown(5, 3600)
     return commands.Cooldown(3, 3600)
 
