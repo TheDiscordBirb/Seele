@@ -54,5 +54,4 @@ async def avatar(interaction: discord.Interaction, member: discord.Member):
     await interaction.response.send_message(embed=embed)
 
 
-if __name__ == "__main__":
-    Seele.run()
+Seele.run()
