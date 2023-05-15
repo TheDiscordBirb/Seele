@@ -77,7 +77,7 @@ class EditRoleModal(discord.ui.Modal):
                     img = BytesIO(r.content)
                 await role.edit(name=self.name.value, color=clr)
                 if img:
-                    await role.edit(icon=img.getvalue())
+                    await role.edit(display_icon=img.getvalue())
             await interaction.response.send_message(
                 "Role edited successfully!", ephemeral=True
             )
