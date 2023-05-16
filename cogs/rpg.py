@@ -538,6 +538,7 @@ class RPG(commands.Cog):
 
         user_shields = document.get("shields", 0)
         if amount > user_shields:
+            self.gamba.reset_cooldown(ctx)
             return await ctx.reply("You can't afford to gamble.")
 
         if not 10 <= amount <= 500:
