@@ -446,7 +446,7 @@ class RPG(commands.Cog):
             )
             cooldown = math.floor(cooldown_end.timestamp())
             return await ctx.reply(
-                f"You have mined recently and got tired, please wait, you will be able to mine again <t:{cooldown}:R>."
+                f"You have caught fish recently and got tired, please wait, you will be able to fish again <t:{cooldown}:R>."
             )
 
     @commands.command(
@@ -558,14 +558,14 @@ class RPG(commands.Cog):
                 {"$inc": {"shields": amount * 2}},
                 return_document=ReturnDocument.AFTER,
             )
-            message = f"You won the bet, earned {humanize.intcomma(amount * 2)}<:Shields_SM:1104809716460310549>!\nBalance: {humanize.intcomma(document.get('shields', 0))}"
+            message = f"You won the bet, earned {humanize.intcomma(amount * 2)}<:Shields_SM:1104809716460310549>!\nBalance: {humanize.intcomma(document.get('shields', 0))}<:Shields_GM:1104809716460310549>"
         else:
             document = db.find_one_and_update(
                 {"_id": ctx.author.id},
                 {"$inc": {"shields": -amount}},
                 return_document=ReturnDocument.AFTER,
             )
-            message = f"You lost the bet.\nBalance: {humanize.intcomma(document.get('shields', 0))}"
+            message = f"You lost the bet.\nBalance: {humanize.intcomma(document.get('shields', 0))}<:Shields_GM:1104809716460310549>"
         await ctx.reply(message)
 
     @gamba.error
