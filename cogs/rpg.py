@@ -456,7 +456,7 @@ class RPG(commands.Cog):
         multiplier = 1.6 if 1102939433038254091 in member_roles else 1
         db.find_one_and_update(
             {"_id": ctx.author.id},
-            {"$inc": {"Shields": daily_earnings * multiplier}},
+            {"$inc": {"shields": daily_earnings * multiplier}},
             upsert=True,
         )
         await ctx.reply(
