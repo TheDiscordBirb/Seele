@@ -162,8 +162,8 @@ class RPG(commands.Cog):
             color=discord.Color.purple(),
         )
         embed.set_thumbnail(url=ctx.author.avatar.url)
-        tool_inventory = user.get("tool-inventory")
-        role_inventory = user.get("role-inventory")
+        tool_inventory = user.get("tool-inventory", [])
+        role_inventory = user.get("role-inventory", [])
         tool_list = ""
         for tool in tool_inventory:
             for k, v in self.tools.items():
