@@ -10,7 +10,9 @@ class Moderation(commands.Cog):
     @discord.app_commands.command(
         name="nsfw-ban", description="Ban someone from viewing NSFW."
     )
-    @discord.app_commands.checks.has_any_role(1101868829317013647, 1101868829296054320)
+    @discord.app_commands.checks.has_any_role(
+        1101868829317013647, 1101868829296054320, 1104144820479459328
+    )
     @discord.app_commands.describe(
         member="The member you want to ban.", reason="Optional, reason for the ban."
     )
@@ -53,7 +55,9 @@ class Moderation(commands.Cog):
     @discord.app_commands.command(
         name="nsfw-unban", description="Unban someone from NSFW."
     )
-    @discord.app_commands.checks.has_any_role(1101868829317013647, 1101868829296054320)
+    @discord.app_commands.checks.has_any_role(
+        1101868829317013647, 1101868829296054320, 1104144820479459328
+    )
     @discord.app_commands.describe(member="The member you want to unban.")
     async def nsfw_unban(
         self, interaction: discord.Interaction, member: discord.Member
@@ -76,6 +80,33 @@ class Moderation(commands.Cog):
 
     @nsfw_unban.error
     async def nsfw_unban_error(self, interaction: discord.Interaction, error):
+        if isinstance(error, commands.errors.MissingAnyRole):
+            return await interaction.response.send_message(error, ephemeral=True)
+        await interaction.response.send_message(error, ephemeral=True)
+
+    @discord.app_commands.command(
+        name="nsfw-mute", description="Mute someone indefinitely in nsfw section."
+    )
+    @discord.app_commands.checks.has_any_role(
+        1101868829317013647, 1101868829296054320, 1104144820479459328
+    )
+    @discord.app_commands.describe(member="Member to mute.")
+    async def nsfw_mute(self, interaction: discord.Interaction, member: discord.Member):
+        await interaction.response.defer(thinking=True)
+        member = interaction.guild.get_member(member.id)
+        nsfw_mute_role = interaction.guild.get_role(1108101110922760313)
+        if nsfw_mute_role not in member.roles:
+            await member.add_roles(nsfw_mute_role)
+            return await interaction.followup.send(
+                f"Muted {member.mention} from NSFW indefinitely."
+            )
+        await member.remove_roles(nsfw_mute_role)
+        await interaction.followup.send(f"Unmuted {member.mention} from NSFW.")
+
+    @nsfw_mute.error
+    async def nsfw_mute_error(
+        self, interaction: discord.Interaction, error: commands.CommandError
+    ):
         if isinstance(error, commands.errors.MissingAnyRole):
             return await interaction.response.send_message(error, ephemeral=True)
         await interaction.response.send_message(error, ephemeral=True)
