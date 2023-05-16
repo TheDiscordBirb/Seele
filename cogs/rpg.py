@@ -496,7 +496,7 @@ class RPG(commands.Cog):
         multiplier = 1.6 if 1102939433038254091 in member_roles else 1
         db.find_one_and_update(
             {"_id": ctx.author.id},
-            {"$inc": {"Shields": earnings * multiplier}},
+            {"$inc": {"shields": earnings * multiplier}},
             return_document=ReturnDocument.AFTER,
         )
         response = random.choice(responses)
