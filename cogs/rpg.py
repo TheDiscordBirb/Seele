@@ -269,7 +269,7 @@ class RPG(commands.Cog):
         role = self.roles.get(role_code)
         if not role:
             return await ctx.reply("Please enter a valid role code for purschase.")
-        for data in user.get("role-inventory"):
+        for data in user.get("role-inventory", []):
             if role.get("code") in data:
                 return await ctx.reply(f"You already own `{role.get('name')}`")
         if user.get("shields") < role.get("price"):
