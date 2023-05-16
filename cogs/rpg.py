@@ -450,7 +450,7 @@ class RPG(commands.Cog):
     )
     @commands.cooldown(1, 86400, commands.BucketType.user)
     async def daily(self, ctx: commands.Context):
-        db = get_database()["Shields"]
+        db = get_database()["Economy"]
         daily_earnings = 300
         member_roles = [role.id for role in ctx.author.roles]
         multiplier = 1.6 if 1102939433038254091 in member_roles else 1
