@@ -519,7 +519,7 @@ class RPG(commands.Cog):
 
     @commands.command(
         name="gamba",
-        description="Gamble your money in, win or lose 1x.",
+        description="Gamble your money in, win 2x or lose 1x.",
         usage="gamba (amount)",
     )
     @commands.dynamic_cooldown(gamba_cooldown, commands.BucketType.user)
