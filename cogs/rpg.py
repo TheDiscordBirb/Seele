@@ -232,7 +232,7 @@ class RPG(commands.Cog):
         tool = self.tools.get(tool_code)
         if not tool:
             return await ctx.reply("Please enter a valid tool code for purschase.")
-        for data in user.get("tool-inventory"):
+        for data in user.get("tool-inventory", []):
             if tool.get("code") in data:
                 return await ctx.reply(f"You already own `{tool.get('name')}`")
         user = db.find_one_and_update(
