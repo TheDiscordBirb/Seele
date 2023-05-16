@@ -158,7 +158,7 @@ class RPG(commands.Cog):
             )
         embed = discord.Embed(
             title=f"{ctx.guild.get_member(user.get('_id')).name}'s Profile",
-            description=f"**Balance**: {user.get('shields', 0)}<:Shields_SM:1104809716460310549>",
+            description=f"**Balance**: {humanize.intcomma(user.get('shields', 0))}<:Shields_SM:1104809716460310549>",
             color=discord.Color.purple(),
         )
         embed.set_thumbnail(url=ctx.author.avatar.url)
@@ -235,7 +235,7 @@ class RPG(commands.Cog):
         for data in user.get("tool-inventory", []):
             if tool.get("code") in data:
                 return await ctx.reply(f"You already own `{tool.get('name')}`")
-        if user.get("shields") < tool.get("price"):
+        if user.get("shields", 0) < tool.get("price"):
             return await ctx.reply(f"You can't afford `{tool.get('name')}`")
         user = db.find_one_and_update(
             {"_id": ctx.author.id},
@@ -272,7 +272,7 @@ class RPG(commands.Cog):
         for data in user.get("role-inventory", []):
             if role.get("code") in data:
                 return await ctx.reply(f"You already own `{role.get('name')}`")
-        if user.get("shields") < role.get("price"):
+        if user.get("shields", 0) < role.get("price"):
             return await ctx.reply(f"You can't afford `{role.get('name')}`")
         user = db.find_one_and_update(
             {"_id": ctx.author.id},
@@ -376,7 +376,7 @@ class RPG(commands.Cog):
 
         random_ore = self.ores.get(random.choices(list(self.ores), weights=weights)[0])
         if random_ore.get("name") == "Diamond":
-            msg = f"You mined `{random_ore['name']}` and sold it for {math.floor(random_ore['value'])}<:Shields_SM:1104809716460310549>"
+            msg = f"🎉 You mined `{random_ore['name']}` and sold it for {math.floor(random_ore['value'])}<:Shields_SM:1104809716460310549> 🎉"
         else:
             msg = f"You mined `{random_ore['name']}` and sold it for {math.floor(random_ore['value'])}<:Shields_SM:1104809716460310549>"
         db.update_one(

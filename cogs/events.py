@@ -77,13 +77,18 @@ class Events(commands.Cog):
                     {"$inc": {"shields": 5}},
                 )
         else:
-            db.insert_one(
+            db.find_one_and_update(
                 {
                     "_id": message.author.id,
-                    "shields": 5,
-                    "tool-inventory": [],
-                    "role-inventory": [],
-                }
+                },
+                {
+                    "$set": {
+                        "shields": 5,
+                        "tool-inventory": [],
+                        "role-inventory": [],
+                    }
+                },
+                upsert=True,
             )
 
 
