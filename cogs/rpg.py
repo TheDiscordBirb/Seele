@@ -76,48 +76,6 @@ class RPG(commands.Cog):
         },
     }
 
-    ores = {
-        "iron_high": {
-            "name": "Iron Ore",
-            "value": round(random.uniform(0.3, 0.6), 2) * 100,
-        },
-        "copper_high": {
-            "name": "Copper Ore",
-            "value": round(random.uniform(0.7, 0.9), 2) * 100,
-        },
-        "gold_low": {
-            "name": "Gold Ore",
-            "value": round(random.uniform(1.3, 1.6), 2) * 100,
-        },
-        "diamond": {
-            "name": "Diamond",
-            "value": round(random.uniform(8.00, 12.00), 2) * 100,
-        },
-    }
-
-    fishes = {
-        "bass": {
-            "name": "Bass",
-            "value": round(random.uniform(0.3, 0.6), 2) * 100,
-        },
-        "salmon": {
-            "name": "Salmon",
-            "value": round(random.uniform(0.7, 0.9), 2) * 100,
-        },
-        "trout": {
-            "name": "Trout",
-            "value": round(random.uniform(1.3, 1.6), 2) * 100,
-        },
-        "tuna": {
-            "name": "Tuna",
-            "value": round(random.uniform(8.00, 12.00), 2) * 100,
-        },
-        "swordfish": {
-            "name": "Swordfish",
-            "value": round(random.uniform(11.00, 14.00), 2) * 100,
-        },
-    }
-
     @commands.command(
         name="balance",
         aliases=["bal"],
@@ -348,6 +306,25 @@ class RPG(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 300, commands.BucketType.user)
     async def mine(self, ctx: commands.Context):
+        
+        ores = {
+            "iron_high": {
+                "name": "Iron Ore",
+                "value": round(random.uniform(0.3, 0.6), 2) * 100,
+            },
+            "copper_high": {
+                "name": "Copper Ore",
+                "value": round(random.uniform(0.7, 0.9), 2) * 100,
+            },
+            "gold_low": {
+                "name": "Gold Ore",
+                "value": round(random.uniform(1.3, 1.6), 2) * 100,
+            },
+            "diamond": {
+                "name": "Diamond",
+                "value": round(random.uniform(8.00, 12.00), 2) * 100,
+            },
+        }
         db = get_database()["Economy"]
         user = db.find_one({"_id": ctx.author.id})
         pickaxe = self.tools.get("pick")
@@ -371,10 +348,10 @@ class RPG(commands.Cog):
             else 0.75
             if ore.lower() != "diamond"
             else diamond_chance
-            for ore in self.ores.keys()
+            for ore in ores.keys()
         ]
 
-        random_ore = self.ores.get(random.choices(list(self.ores), weights=weights)[0])
+        random_ore = ores.get(random.choices(list(ores), weights=weights)[0])
         if random_ore.get("name") == "Diamond":
             msg = f"🎉 You mined `{random_ore['name']}` and sold it for {math.floor(random_ore['value'])}<:Shields_SM:1104809716460310549> 🎉"
         else:
@@ -397,10 +374,32 @@ class RPG(commands.Cog):
                 f"You have mined recently and got tired, please wait, you will be able to mine again <t:{cooldown}:R>."
             )
 
-    @commands.command(name="fish", usage="fish", description="Fish for fish for money.")
+    @commands.command(name="fish", usage="fish", description="Fish for money.")
     @commands.guild_only()
     @commands.cooldown(1, 300, commands.BucketType.user)
     async def fish(self, ctx: commands.Context):
+        fishes = {
+            "bass": {
+                "name": "Bass",
+                "value": round(random.uniform(0.3, 0.6), 2) * 100,
+            },
+            "salmon": {
+                "name": "Salmon",
+                "value": round(random.uniform(0.7, 0.9), 2) * 100,
+            },
+            "trout": {
+                "name": "Trout",
+                "value": round(random.uniform(1.3, 1.6), 2) * 100,
+            },
+            "tuna": {
+                "name": "Tuna",
+                "value": round(random.uniform(8.00, 12.00), 2) * 100,
+            },
+            "swordfish": {
+                "name": "Swordfish",
+                "value": round(random.uniform(11.00, 14.00), 2) * 100,
+            },
+        }
         db = get_database()["Economy"]
         user = db.find_one({"_id": ctx.author.id})
         rod = self.tools.get("rod")
@@ -425,8 +424,8 @@ class RPG(commands.Cog):
             "Swordfish": 0.05,
         }
 
-        random_fish = self.fishes.get(
-            random.choices(list(self.fishes), weights=list(fish_populations.values()))[
+        random_fish = fishes.get(
+            random.choices(list(fishes), weights=list(fish_populations.values()))[
                 0
             ]
         )
