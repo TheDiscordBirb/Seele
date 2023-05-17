@@ -94,7 +94,7 @@ class RPG(commands.Cog):
                 return_document=ReturnDocument.AFTER,
             )
         await ctx.reply(
-            f"You have {humanize.intcomma(user.get('shields', 0))}<:Shields_SM:1104809716460310549> in your account."
+            f"You have {humanize.intcomma(round(user.get('shields', 0)))}<:Shields_SM:1104809716460310549> in your account."
         )
 
     @commands.command(
