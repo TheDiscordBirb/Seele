@@ -348,7 +348,7 @@ class RPG(commands.Cog):
             else 0.75
             if ore.lower() != "diamond"
             else diamond_chance
-            for ore in ores.keys()
+            for ore in ores
         ]
 
         random_ore = ores.get(random.choices(list(ores), weights=weights)[0])
