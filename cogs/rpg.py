@@ -96,6 +96,29 @@ class RPG(commands.Cog):
         await ctx.reply(
             f"You have {humanize.intcomma(round(user.get('shields', 0)))}<:Shields_SM:1104809716460310549> in your account."
         )
+        
+    #@commands.command(
+    #    name="balance_top",
+    #    aliases=["bal_top"],
+    #    usage="balance_top",
+    #    description="Check the top 10 balance.",
+    #)
+    #@commands.guild_only()
+    #async def balance_top(self, ctx: commands.Context):
+    #    db = get_database()["Economy"]
+    #    for user in db.find():
+    #        ctx.author.dm_channel.send(user)
+        #user = db.find_one({"_id": ctx.author.id})
+        #if user is None:
+        #    user = db.find_one_and_update(
+        #        {"_id": ctx.author.id},
+        #        {"$set": {"shields": 0, "tool-inventory": [], "role-inventory": []}},
+        #        upsert=True,
+        #        return_document=ReturnDocument.AFTER,
+        #    )
+        #await ctx.reply(
+        #    f"You have {humanize.intcomma(round(user.get('shields', 0)))}<:Shields_SM:1104809716460310549> in your account."
+        #)
 
     @commands.command(
         name="profile",
@@ -417,10 +440,10 @@ class RPG(commands.Cog):
             return await ctx.reply("You need a fishing rod to fish.")
 
         fish_populations = {
-            "Bass": 0.4,
-            "Salmon": 0.25,
+            "Bass": 0.9,
+            "Salmon": 0.5,
             "Trout": 0.2,
-            "Tuna": 0.1,
+            "Tuna": 0.07,
             "Swordfish": 0.05,
         }
 
