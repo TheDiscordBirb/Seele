@@ -35,11 +35,11 @@ class Admin(commands.Cog):
                             await channel.send(f"`{ctx.author.name}` gave `{member.name}` `{amt}` shields")
                     elif amt < 0:
                         if amt == -1:
-                            await ctx.reply(f"`{ctx.author.name}` took away `{amt}` shield from `{member.name}`")
-                            await channel.send(f"`{ctx.author.name}` took away `{amt}` shield from `{member.name}`")
+                            await ctx.reply(f"`{ctx.author.name}` took away `{amt*-1}` shield from `{member.name}`")
+                            await channel.send(f"`{ctx.author.name}` took away `{amt*-1}` shield from `{member.name}`")
                         else:
-                            await ctx.reply(f"`{ctx.author.name}` took away `{amt}` shields from `{member.name}`")
-                            await channel.send(f"`{ctx.author.name}` took away `{amt}` shields from `{member.name}`")
+                            await ctx.reply(f"`{ctx.author.name}` took away `{amt*-1}` shields from `{member.name}`")
+                            await channel.send(f"`{ctx.author.name}` took away `{amt*-1}` shields from `{member.name}`")
                     
         
         
