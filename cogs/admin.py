@@ -27,19 +27,11 @@ class Admin(commands.Cog):
                     )
                     channel = ctx.guild.get_channel(1112849838812438619)
                     if amt > 0:
-                        if amt == 1:
-                            await ctx.reply(f"`{ctx.author.name}` gave `{member.name}` `{amt}` shield")
-                            await channel.send(f"`{ctx.author.name}` gave `{member.name}` `{amt}` shield")
-                        else:
-                            await ctx.reply(f"`{ctx.author.name}` gave `{member.name}` `{amt}` shields")
-                            await channel.send(f"`{ctx.author.name}` gave `{member.name}` `{amt}` shields")
+                        await ctx.reply(f"`{ctx.author.name}` gave `{member.name}` `{amt}` <:Shields_SM:1104809716460310549>")
+                        await channel.send(f"`{ctx.author.name}` gave `{member.name}` `{amt}` <:Shields_SM:1104809716460310549>")
                     elif amt < 0:
-                        if amt == -1:
-                            await ctx.reply(f"`{ctx.author.name}` took away `{amt*-1}` shield from `{member.name}`")
-                            await channel.send(f"`{ctx.author.name}` took away `{amt*-1}` shield from `{member.name}`")
-                        else:
-                            await ctx.reply(f"`{ctx.author.name}` took away `{amt*-1}` shields from `{member.name}`")
-                            await channel.send(f"`{ctx.author.name}` took away `{amt*-1}` shields from `{member.name}`")
+                        await ctx.reply(f"`{ctx.author.name}` took away `{amt*-1}` <:Shields_SM:1104809716460310549> from `{member.name}`")
+                        await channel.send(f"`{ctx.author.name}` took away `{amt*-1}` <:Shields_SM:1104809716460310549> from `{member.name}`")
                     
         
         
