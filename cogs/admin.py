@@ -13,10 +13,10 @@ class Admin(commands.Cog):
     @commands.guild_only()
     async def give(self, ctx: commands.Context, amt: int = None, member: discord.Member = None):
         if amt is None:
-            await channel.send(f"Specify amount")
+            await ctx.reply(f"Specify amount")
         else:
             if member is None:
-                await channel.send(f"Specify user")
+                await ctx.reply(f"Specify user")
             else:
                 role = discord.utils.get(ctx.guild.roles, id=1101868829317013647)
                 if role in ctx.author.roles or ctx.author.id in self.bot.owner_ids:
@@ -25,9 +25,8 @@ class Admin(commands.Cog):
                         {"_id": member.id},
                         {"$inc":{"shields": amt}}
                     )
+                    await ctx.reply(f"`{ctx.author.name}` gave `{member.name}` `{amt}` shield(s)")
                     
-                    channel1 = discord.utils.get(ctx.guild.channels, id=1112849838812438619)
-                    await ctx.author.send(channel1)
                     channel = ctx.guild.get_channel(1112849838812438619)
                     await channel.send(f"`{ctx.author.name}` gave `{member.name}` `{amt}` shield(s)")
         
