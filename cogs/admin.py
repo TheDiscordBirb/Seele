@@ -25,6 +25,7 @@ class Admin(commands.Cog):
                         {"_id": member.id},
                         {"$inc":{"shields": amt}}
                     )
+                    await ctx.reply(f"`{ctx.author.name}` gave `{member.name}` `{amt}` shield(s)")
                     
                     channel = ctx.guild.get_channel(1112849838812438619)
                     await channel.send(f"`{ctx.author.name}` gave `{member.name}` `{amt}` shield(s)")
