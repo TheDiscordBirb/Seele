@@ -11,7 +11,7 @@ class Admin(commands.Cog):
         
     @commands.command(name="give")
     @commands.guild_only()
-    async def give(self, ctx: commands.Context, amt: int = None, member: discord.Member = None):
+    async def give(self, ctx: commands.Context, member: discord.Member = None, amt: int = None):
         if amt is None:
             await ctx.reply(f"Specify amount")
         else:
