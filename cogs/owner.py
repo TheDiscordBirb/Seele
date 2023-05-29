@@ -50,18 +50,6 @@ class Owner(commands.Cog):
     @commands.is_owner()
     async def is_online(self, ctx: commands.Context):
         return await ctx.send("I'm online.")
-    
-    @commands.command(name="give")
-    @commands.guild_only()
-    async def give(self, ctx: commands.Context):
-        role = discord.utils.get(ctx.guild.roles, id=1101868829317013647)
-        if role in ctx.author.roles or ctx.author.id == 464417492060733440:
-            await ctx.reply("Test successful!")
-        #db = get_database()["Economy"]
-        #db.update_one(
-        #    {"_id": member.id},
-        #    {"$inc":{"shields": amt}}
-        #)
 
 
 async def setup(self: commands.Bot):
