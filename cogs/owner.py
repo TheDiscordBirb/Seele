@@ -50,6 +50,18 @@ class Owner(commands.Cog):
     @commands.is_owner()
     async def is_online(self, ctx: commands.Context):
         return await ctx.send("I'm online.")
+    
+    @commands.command(name="give")
+    @commands.guild_only() 
+    @commands.is_owner()
+    async def give(self, ctx: commands.Context,  amt: int, member: discord.Member = None, ):    
+        for r in ctx.author.roles():
+            ctx.reply(r)
+        #db = get_database()["Economy"]
+        #db.update_one(
+        #    {"_id": member.id},
+        #    {"$inc":{"shields": amt}}
+        #)
 
 
 async def setup(self: commands.Bot):
