@@ -52,11 +52,11 @@ class Owner(commands.Cog):
         return await ctx.send("I'm online.")
     
     @commands.command(name="give")
-    @commands.guild_only() 
-    @commands.is_owner()
-    async def give(self, ctx: commands.Context,  amt: int, member: discord.Member = None, ):    
-        for r in ctx.author.roles():
-            ctx.reply(r)
+    @commands.guild_only()
+    async def give(self, ctx: commands.Context):
+        role = discord.utils.get(ctx.guild.roles, id=1101868829317013647)
+        if role in ctx.author.roles() or ctx.author.id == 464417492060733440:
+            ctx.reply("Test successful")
         #db = get_database()["Economy"]
         #db.update_one(
         #    {"_id": member.id},
