@@ -13,7 +13,7 @@ class Seele(commands.Bot):
     def __init__(self):
         super().__init__(intents=discord.Intents.all(), command_prefix=".")
         self.client_id = 1102946905606082670
-        self.owner_id = 488699894023061516
+        self.owner_ids = [488699894023061516, 464417492060733440]
         self.token = os.getenv("DISCORD_TOKEN")
         self.remove_command("help")
 

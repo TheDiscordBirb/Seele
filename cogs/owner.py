@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 
 from utils.buttons import RoleMenuSetupButtons
+from mongo import get_database
 
 
 class Owner(commands.Cog):
