@@ -7,6 +7,7 @@ from mongo import get_database
 class Admin(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
+        self.admin_roleID = 1101868829317013647
         
     @commands.command(name="give")
     @commands.guild_only()
