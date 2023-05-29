@@ -11,7 +11,7 @@ class Admin(commands.Cog):
         
     @commands.command(name="give")
     @commands.guild_only()
-    async def give(self, ctx: commands.Context, amt: int = None, member: discord.Member = None):
+    async def give(self, ctx: commands.Context, member: discord.Member = None, amt: int = None):
         if amt is None:
             await ctx.reply(f"Specify amount")
         else:
@@ -25,10 +25,22 @@ class Admin(commands.Cog):
                         {"_id": member.id},
                         {"$inc":{"shields": amt}}
                     )
-                    await ctx.reply(f"`{ctx.author.name}` gave `{member.name}` `{amt}` shield(s)")
-                    
                     channel = ctx.guild.get_channel(1112849838812438619)
-                    await channel.send(f"`{ctx.author.name}` gave `{member.name}` `{amt}` shield(s)")
+                    if amt > 0:
+                        if amt == 1:
+                            await ctx.reply(f"`{ctx.author.name}` gave `{member.name}` `{amt}` shield")
+                            await channel.send(f"`{ctx.author.name}` gave `{member.name}` `{amt}` shield")
+                        else:
+                            await ctx.reply(f"`{ctx.author.name}` gave `{member.name}` `{amt}` shields")
+                            await channel.send(f"`{ctx.author.name}` gave `{member.name}` `{amt}` shields")
+                    elif amt < 0:
+                        if amt == -1:
+                            await ctx.reply(f"`{ctx.author.name}` took away `{amt}` shield from `{member.name}`")
+                            await channel.send(f"`{ctx.author.name}` took away `{amt}` shield from `{member.name}`")
+                        else:
+                            await ctx.reply(f"`{ctx.author.name}` took away `{amt}` shields from `{member.name}`")
+                            await channel.send(f"`{ctx.author.name}` took away `{amt}` shields from `{member.name}`")
+                    
         
         
         
