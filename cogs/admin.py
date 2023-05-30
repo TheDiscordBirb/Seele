@@ -7,10 +7,12 @@ from mongo import get_database
 class Admin(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-
+        self.admin_roleID = 1101868829317013647
+        
     @commands.command(name="give")
     @commands.guild_only()
     async def give(self, ctx: commands.Context, member: discord.Member = None, amt: int = None):
+        
         if member is None:
             return await ctx.reply("Specify member.")
         if amt is None:
@@ -32,13 +34,13 @@ class Admin(commands.Cog):
                 await ctx.reply(f"`{ctx.author.name}` took away `{abs(amt)}` `{shield_text}`<:Shields_SM:1104809716460310549> from `{member.name}`")
                 await channel.send(f"`{ctx.author.name}` took away `{abs(amt)}` `{shield_text}`<:Shields_SM:1104809716460310549> from `{member.name}`")
                         
-
     @give.error
     async def give_error(self, ctx: commands.Context, error: commands.CommandError):
         if isinstance(error, commands.MissingRole):
             return await ctx.reply("You don't have permission to use this command.")
         if isinstance(error, commands.MemberNotFound):
             return await ctx.reply("Invalid Member.")
-          
+        
+        
 async def setup(self: commands.Bot):
-    await self.add_cog(Admin(self))
+    await self.add_cog(Admin(self))     
