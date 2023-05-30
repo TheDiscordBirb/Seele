@@ -18,7 +18,7 @@ class Admin(commands.Cog):
         if amt is None:
             return await ctx.reply("Specify amount.")
         
-        role = discord.utils.get(ctx.guild.roles, id=1101868829317013647)
+        role = discord.utils.get(ctx.guild.roles, id=self.admin_roleID)
         if role in ctx.author.roles or ctx.author.id in self.bot.owner_ids:
             db = get_database()["Economy"]
             db.update_one(
