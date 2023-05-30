@@ -289,7 +289,7 @@ class RPG(commands.Cog):
             )
         for data in user.get("role-inventory", []):
             await ctx.author.send(data)
-            await ctx.author.send(user.get("code"))
+            await ctx.author.send(role.get("code"))
             if role.get("code") not in data:
                 return await ctx.reply(f"You haven't purschased `{role.get('name')}`.")
         role = ctx.guild.get_role(role.get("_id"))
