@@ -288,8 +288,6 @@ class RPG(commands.Cog):
                 return_document=ReturnDocument.AFTER,
             )
         for data in user.get("role-inventory", []):
-            await ctx.author.send(data)
-            await ctx.author.send(role.get("code"))
             if role.get("code") in data:
                 role = ctx.guild.get_role(role.get("_id"))
                 await ctx.author.add_roles(role)
@@ -317,11 +315,11 @@ class RPG(commands.Cog):
                 return_document=ReturnDocument.AFTER,
             )
         for data in user.get("role-inventory", []):
-            if role.get("code") not in data:
-                return await ctx.reply(f"You don't own `{role.get('name')}`.")
-        role = ctx.guild.get_role(role.get("_id"))
-        await ctx.author.remove_roles(role)
-        await ctx.reply(f"Unequipped `{role.name}`")
+            if role.get("code") in data:
+                role = ctx.guild.get_role(role.get("_id"))
+                await ctx.author.remove_roles(role)
+                return await ctx.reply(f"Unequipped `{role.name}`")
+        await ctx.reply(f"You don't own `{role.get('name')}`.")
 
     @commands.command(
         name="mine",
