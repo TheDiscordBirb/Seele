@@ -84,6 +84,7 @@ class RPG(commands.Cog):
     )
     @commands.guild_only()
     async def balance(self, ctx: commands.Context):
+        if ctx.author.id == 932881107916062801: return await ctx.reply("No")
         db = get_database()["Economy"]
         user = db.find_one({"_id": ctx.author.id})
         if user is None:
@@ -104,6 +105,7 @@ class RPG(commands.Cog):
     #    description="Check the top 10 balance.",
     #)
     #@commands.guild_only()
+    #if ctx.author.id == 932881107916062801: return await ctx.reply("No")
     #async def balance_top(self, ctx: commands.Context):
     #    db = get_database()["Economy"]
     #    for user in db.find():
@@ -128,6 +130,7 @@ class RPG(commands.Cog):
     )
     @commands.guild_only()
     async def profile(self, ctx: commands.Context, member: discord.Member = None):
+        if ctx.author.id == 932881107916062801: return await ctx.reply("No")
         db = get_database()["Economy"]
         user = db.find_one({"_id": member.id if member else ctx.author.id})
         if user is None:
@@ -167,6 +170,7 @@ class RPG(commands.Cog):
     )
     @commands.guild_only()
     async def tool_shop(self, ctx: commands.Context):
+        if ctx.author.id == 932881107916062801: return await ctx.reply("No")
         _description = "\n".join(
             f"{details.get('name')}: {details.get('price')}<:Shields_SM:1104809716460310549>\ncode: `{tool_code}`"
             for tool_code, details in self.tools.items()
@@ -184,6 +188,7 @@ class RPG(commands.Cog):
     )
     @commands.guild_only()
     async def role_shop(self, ctx: commands.Context):
+        if ctx.author.id == 932881107916062801: return await ctx.reply("No")
         _description = "\n".join(
             f"{ctx.guild.get_role(details.get('_id')).mention}: {humanize.intcomma(details.get('price'))}<:Shields_SM:1104809716460310549>\ncode: `{role_code}`"
             for role_code, details in self.roles.items()
@@ -201,6 +206,7 @@ class RPG(commands.Cog):
     )
     @commands.guild_only()
     async def buy_tool(self, ctx: commands.Context, tool_code: str = None):
+        if ctx.author.id == 932881107916062801: return await ctx.reply("No")
         db = get_database()["Economy"]
         user = db.find_one({"_id": ctx.author.id})
         if user is None:
@@ -238,6 +244,7 @@ class RPG(commands.Cog):
     )
     @commands.guild_only()
     async def buy_role(self, ctx: commands.Context, role_code: str = None):
+        if ctx.author.id == 932881107916062801: return await ctx.reply("No")
         db = get_database()["Economy"]
         user = db.find_one({"_id": ctx.author.id})
         if user is None:
@@ -275,6 +282,7 @@ class RPG(commands.Cog):
     )
     @commands.guild_only()
     async def equip_role(self, ctx: commands.Context, role_code: str = None):
+        if ctx.author.id == 932881107916062801: return await ctx.reply("No")
         db = get_database()["Economy"]
         user = db.find_one({"_id": ctx.author.id})
         role = self.roles.get(role_code)
@@ -302,6 +310,7 @@ class RPG(commands.Cog):
     )
     @commands.guild_only()
     async def unequip_role(self, ctx: commands.Context, role_code: str = None):
+        if ctx.author.id == 932881107916062801: return await ctx.reply("No")
         db = get_database()["Economy"]
         user = db.find_one({"_id": ctx.author.id})
         role = self.roles.get(role_code)
@@ -329,6 +338,7 @@ class RPG(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 300, commands.BucketType.user)
     async def mine(self, ctx: commands.Context):
+        if ctx.author.id == 932881107916062801: return await ctx.reply("No")
         
         ores = {
             "iron_high": {
@@ -401,6 +411,7 @@ class RPG(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 300, commands.BucketType.user)
     async def fish(self, ctx: commands.Context):
+        if ctx.author.id == 932881107916062801: return await ctx.reply("No")
         fishes = {
             "bass": {
                 "name": "Bass",
@@ -476,6 +487,7 @@ class RPG(commands.Cog):
     )
     @commands.cooldown(1, 86400, commands.BucketType.user)
     async def daily(self, ctx: commands.Context):
+        if ctx.author.id == 932881107916062801: return await ctx.reply("No")
         db = get_database()["Economy"]
         daily_earnings = 300
         member_roles = [role.id for role in ctx.author.roles]
@@ -503,6 +515,7 @@ class RPG(commands.Cog):
     @commands.command(name="work", description="Work for shields.", usage="work")
     @commands.cooldown(1, 1800, commands.BucketType.user)
     async def work(self, ctx: commands.Context):
+        if ctx.author.id == 932881107916062801: return await ctx.reply("No")
         db = get_database()["Economy"]
         earnings = random.randint(25, 100)
         responses = [
@@ -550,6 +563,7 @@ class RPG(commands.Cog):
     )
     @commands.dynamic_cooldown(gamba_cooldown, commands.BucketType.user)
     async def gamba(self, ctx: commands.Context, amount: int = 10):
+        if ctx.author.id == 932881107916062801: return await ctx.reply("No")
         db = get_database()["Economy"]
         document = db.find_one({"_id": ctx.author.id})
 
