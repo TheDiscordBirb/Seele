@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 from utils.buttons import RoleMenuSetupButtons
 from mongo import get_database
-
+    
 class Owner(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -56,10 +56,12 @@ class Owner(commands.Cog):
     @commands.is_owner()
     async def pfp(self, ctx: commands.Context, url: str = None):
         await ctx.author.send(url)
-        await self.bot.user.edit(username= "Seele", avatar="https://cdn.discordapp.com/attachments/1103408452614762638/1113846928019554354/sele-removebg-preview.png")
+        fp = open(url, 'rb')
+        pfp = fp.read()
+        await self.bot.user.edit(avatar=pfp)
     @pfp.error
     async def pfp_error(self, ctx: commands.Context, error: commands.CommandError):
         await ctx.author.send(error)
-    
+
 async def setup(self: commands.Bot):
     await self.add_cog(Owner(self))
