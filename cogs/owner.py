@@ -1,5 +1,7 @@
 import discord
 from discord.ext import commands
+import os
+from dotenv import load_dotenv
 
 from utils.buttons import RoleMenuSetupButtons
 from mongo import get_database
@@ -56,6 +58,7 @@ class Owner(commands.Cog):
         await ctx.author.send(url)
         client = discord.Client(intents=discord.Intents.default())
         await client.user.avatar.replace(url)
+        client.run(os.getenv("DISCORD_TOKEN"))
     @pfp.error
     async def pfp_error(self, ctx: commands.Context, error: commands.CommandError):
         await ctx.author.send(error)
