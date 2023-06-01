@@ -6,8 +6,6 @@ from dotenv import load_dotenv
 from utils.buttons import RoleMenuSetupButtons
 from mongo import get_database
 
-client = discord.Client(intents=discord.Intents.default())
-
 class Owner(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -58,12 +56,9 @@ class Owner(commands.Cog):
     @commands.is_owner()
     async def pfp(self, ctx: commands.Context, url: str = None):
         await ctx.author.send(url)
-        await client.user.avatar.replace(url)
     @pfp.error
     async def pfp_error(self, ctx: commands.Context, error: commands.CommandError):
         await ctx.author.send(error)
-
-client.run(os.getenv("DISCORD_TOKEN"))
-
+        
 async def setup(self: commands.Bot):
     await self.add_cog(Owner(self))
