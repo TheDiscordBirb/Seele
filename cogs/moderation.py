@@ -22,7 +22,6 @@ class Moderation(commands.Cog):
         member: discord.Member,
         reason: str = None,
     ):
-        if interaction.user.id == 932881107916062801: return await interaction.response.defer("No")
         await interaction.response.defer(thinking=True)
         member = interaction.guild.get_member(member.id)
         ban_reason = reason if reason is not None else "Reason not provided."
@@ -125,7 +124,6 @@ class Moderation(commands.Cog):
         message: str,
         channel: discord.TextChannel = None,
     ):
-        if interaction.user.id == 932881107916062801: return await interaction.response.defer("No")
         await interaction.response.defer(ephemeral=True)
         if channel:
             await interaction.followup.send("Sent.")
