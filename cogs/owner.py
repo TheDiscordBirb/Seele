@@ -54,12 +54,8 @@ class Owner(commands.Cog):
     @commands.command(name="pfp")
     @commands.is_owner()
     async def pfp(self, ctx: commands.Context):
-        avatar = ctx.author.avatar
-        with open(avatar, "rb") as image:
-            await ctx.author.send("test complete")
-            await ctx.author.send(avatar)
-            await discord.ClientUser.edit(avatar=image)
-
+        avatar = ctx.author.avatar.url
+        await ctx.author.send(avatar)
 
 async def setup(self: commands.Bot):
     await self.add_cog(Owner(self))
