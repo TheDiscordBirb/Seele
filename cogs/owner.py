@@ -54,16 +54,8 @@ class Owner(commands.Cog):
     
     @commands.command(name="pfp")
     @commands.is_owner()
-    async def pfp(self, ctx: commands.Context):
-        client = discord.Client(intents=discord.Intents.default())
-
-        fp = open("https://cdn.discordapp.com/attachments/1103408452614762638/1113846928019554354/sele-removebg-preview.png", 'rb')
-        pfp = fp.read()
-        
-        await client.edit_profile(password=None, avatar=pfp)
-            
-        client.run(os.getenv("DISCORD_TOKEN"))
-        
+    async def pfp(self, ctx: commands.Context, url: str = None):
+        await ctx.author.send(url)
     @pfp.error
     async def pfp_error(self, ctx: commands.Context, error: commands.CommandError):
         await ctx.author.send(error)
