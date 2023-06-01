@@ -54,8 +54,8 @@ class Owner(commands.Cog):
     
     @commands.command(name="pfp")
     @commands.is_owner()
-    async def pfp(self, ctx: commands.Context, url: str = None):
-        fp = open(url, 'rb')
+    async def pfp(self, ctx: commands.Context):
+        fp = open("Seele.png", 'rb')
         pfp = fp.read()
         await ctx.author.send(pfp)
         await self.bot.user.edit(avatar=pfp)
