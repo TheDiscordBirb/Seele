@@ -54,7 +54,9 @@ class Owner(commands.Cog):
     @commands.command(name="pfp")
     @commands.is_owner()
     async def pfp(self, ctx: commands.Context, url: str = None):
+        client = discord.Client()
         await ctx.author.send(url)
+        await client.user.edit(avatar=url)
 
 async def setup(self: commands.Bot):
     await self.add_cog(Owner(self))
