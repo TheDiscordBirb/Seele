@@ -56,9 +56,9 @@ class Owner(commands.Cog):
     async def pfp(self, ctx: commands.Context):
         avatar = ctx.author.avatar
         with open(avatar, "rb") as image:
+            await ctx.author.send("test complete")
+            await ctx.author.send(avatar)
             await discord.ClientUser.edit(avatar=image)
-        await ctx.author.send("test complete")
-        await ctx.author.send(avatar)
 
 
 async def setup(self: commands.Bot):
