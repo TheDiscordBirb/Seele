@@ -4,8 +4,6 @@ from discord.ext import commands
 from utils.buttons import RoleMenuSetupButtons
 from mongo import get_database
 
-client = discord.Client()
-
 class Owner(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -56,6 +54,7 @@ class Owner(commands.Cog):
     @commands.is_owner()
     async def pfp(self, ctx: commands.Context, url: str = None):
         await ctx.author.send(url)
+        client = discord.Client()
         await client.user.edit(avatar=url)
     @pfp.error
     async def pfp_error(self, ctx: commands.Context, error: commands.CommandError):
