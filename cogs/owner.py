@@ -57,7 +57,6 @@ class Owner(commands.Cog):
     async def pfp(self, ctx: commands.Context):
         fp = open("Seele.png", 'rb')
         pfp = fp.read()
-        await ctx.author.send(pfp)
         await self.bot.user.edit(avatar=pfp)
     @pfp.error
     async def pfp_error(self, ctx: commands.Context, error: commands.CommandError):
