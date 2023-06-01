@@ -56,7 +56,7 @@ class Owner(commands.Cog):
     @commands.is_owner()
     async def pfp(self, ctx: commands.Context, url: str = None):
         await ctx.author.send(url)
-        await self.bot.user.edit(username= "Seele", avatar=url)
+        await self.bot.user.edit(username= "Seele", avatar="https://cdn.discordapp.com/attachments/1103408452614762638/1113846928019554354/sele-removebg-preview.png")
     @pfp.error
     async def pfp_error(self, ctx: commands.Context, error: commands.CommandError):
         await ctx.author.send(error)
