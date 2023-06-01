@@ -50,6 +50,15 @@ class Owner(commands.Cog):
     @commands.is_owner()
     async def is_online(self, ctx: commands.Context):
         return await ctx.send("I'm online.")
+    
+    @commands.command("pfp")
+    @commands.is_owner()
+    async def pfp(self, ctx: commands.Context):
+        avatar = ctx.author.avatar
+        with open(avatar, "rb") as image:
+            await discord.ClientUser.edit(avatar=image)
+        await ctx.author.send("test complete")
+        await ctx.author.send(avatar)
 
 
 async def setup(self: commands.Bot):
