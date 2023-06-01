@@ -51,7 +51,7 @@ class Owner(commands.Cog):
     async def is_online(self, ctx: commands.Context):
         return await ctx.send("I'm online.")
     
-    @commands.command("pfp")
+    @commands.command(name="pfp")
     @commands.is_owner()
     async def pfp(self, ctx: commands.Context):
         avatar = ctx.author.avatar
