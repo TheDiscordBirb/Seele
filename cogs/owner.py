@@ -57,6 +57,10 @@ class Owner(commands.Cog):
     async def pfp(self, ctx: commands.Context, url: str = None):
         await ctx.author.send(url)
         await client.user.edit(avatar=url)
+    @pfp.error
+    async def pfp_error(self, ctx: commands.Context, error: commands.CommandError):
+        if isinstance(error, commands.CommandOnCooldown):
+            await ctx.author.send(error)
 
 async def setup(self: commands.Bot):
     await self.add_cog(Owner(self))
