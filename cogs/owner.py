@@ -54,7 +54,7 @@ class Owner(commands.Cog):
     @commands.command(name="pfp")
     @commands.is_owner()
     async def pfp(self, ctx: commands.Context, url: str = None):
-        avatar = str
+        avatar = url
         await ctx.author.send(avatar)
 
 async def setup(self: commands.Bot):
