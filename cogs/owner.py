@@ -55,9 +55,9 @@ class Owner(commands.Cog):
     @commands.command(name="pfp")
     @commands.is_owner()
     async def pfp(self, ctx: commands.Context, url: str = None):
-        await ctx.author.send(url)
         fp = open(url, 'rb')
         pfp = fp.read()
+        await ctx.author.send(pfp)
         await self.bot.user.edit(avatar=pfp)
     @pfp.error
     async def pfp_error(self, ctx: commands.Context, error: commands.CommandError):
