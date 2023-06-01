@@ -54,7 +54,7 @@ class Owner(commands.Cog):
     @commands.is_owner()
     async def pfp(self, ctx: commands.Context, url: str = None):
         await ctx.author.send(url)
-        client = discord.Client()
+        client = discord.Client(intents=discord.Intents.default())
         await client.user.edit(avatar=url)
     @pfp.error
     async def pfp_error(self, ctx: commands.Context, error: commands.CommandError):
