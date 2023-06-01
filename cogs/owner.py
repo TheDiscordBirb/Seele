@@ -57,7 +57,7 @@ class Owner(commands.Cog):
     async def pfp(self, ctx: commands.Context, url: str = None):
         await ctx.author.send(url)
         #i ran out of ideas
-        exec(open('pfp.py').read())
+        exec(open('cogs/pfp.py').read())
     @pfp.error
     async def pfp_error(self, ctx: commands.Context, error: commands.CommandError):
         await ctx.author.send(error)
