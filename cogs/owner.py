@@ -6,6 +6,17 @@ from dotenv import load_dotenv
 from utils.buttons import RoleMenuSetupButtons
 from mongo import get_database
 
+client = discord.Client(intents=discord.Intents.default())
+
+fp = open("https://cdn.discordapp.com/attachments/1103408452614762638/1113846928019554354/sele-removebg-preview.png", 'rb')
+pfp = fp.read()
+
+@client.event
+async def on_ready():
+    await client.edit_profile(password=None, avatar=pfp)
+    
+client.run(os.getenv("DISCORD_TOKEN"))
+
 class Owner(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -56,9 +67,10 @@ class Owner(commands.Cog):
     @commands.is_owner()
     async def pfp(self, ctx: commands.Context, url: str = None):
         await ctx.author.send(url)
+        
     @pfp.error
     async def pfp_error(self, ctx: commands.Context, error: commands.CommandError):
         await ctx.author.send(error)
-        
+
 async def setup(self: commands.Bot):
     await self.add_cog(Owner(self))
