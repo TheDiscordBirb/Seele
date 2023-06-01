@@ -1,7 +1,7 @@
 import discord
 import os
 
-client = discord.Client()
+client = discord.Client(intents=discord.Intents.default())
 
 token = os.getenv("DISCORD_TOKEN")
 
