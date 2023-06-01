@@ -63,7 +63,6 @@ class Moderation(commands.Cog):
     async def nsfw_unban(
         self, interaction: discord.Interaction, member: discord.Member
     ):
-        if interaction.user.id == 932881107916062801: return await interaction.response.defer("No")
         await interaction.response.defer(thinking=True)
         member = interaction.guild.get_member(member.id)
         nsfw_banned_role = interaction.guild.get_role(1105208057417445386)
@@ -94,7 +93,6 @@ class Moderation(commands.Cog):
     )
     @discord.app_commands.describe(member="Member to mute.")
     async def nsfw_mute(self, interaction: discord.Interaction, member: discord.Member):
-        if interaction.user.id == 932881107916062801: return await interaction.response.defer("No")
         await interaction.response.defer(thinking=True)
         member = interaction.guild.get_member(member.id)
         nsfw_mute_role = interaction.guild.get_role(1108101110922760313)
