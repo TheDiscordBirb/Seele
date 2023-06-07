@@ -63,5 +63,15 @@ class Owner(commands.Cog):
     async def pfp_error(self, ctx: commands.Context, error: commands.CommandError):
         await ctx.author.send(error)
         
+    @commands.command(name="act")
+    @commands.is_owner()
+    async def activity(self, ctx: commands.Context, activity: str = None):
+        activity = activity.replace("_", " ")
+        await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=activity))
+        await ctx.author.send("Activity set")
+    @activity.error
+    async def activity_error(self, ctx: commands.Context, error: commands.CommandError):
+        await ctx.author.send(error)
+        
 async def setup(self: commands.Bot):
     await self.add_cog(Owner(self))
