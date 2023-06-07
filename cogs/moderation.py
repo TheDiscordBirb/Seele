@@ -162,7 +162,11 @@ class Moderation(commands.Cog):
     ):
         await interaction.response.defer(ephemeral=True)
         await interaction.followup.send("Activity set")
-        self.activity_set(activity)
+        self.activity1 = activity
+    
+    @tasks.loop(seconds=20)
+    async def activity_set(self):
+        await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=self.activity1))
         
 
     @activity.error
@@ -174,9 +178,6 @@ class Moderation(commands.Cog):
         await interaction.response.send_message(error, ephemeral=True)
         
     
-    @tasks.loop(seconds=20)
-    async def activity_set(self, activity: str):
-        await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=activity))
 
 
 async def setup(self: commands.Bot):
