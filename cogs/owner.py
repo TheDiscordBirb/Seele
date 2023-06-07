@@ -65,9 +65,10 @@ class Owner(commands.Cog):
         
     @commands.command(name="act")
     @commands.is_owner()
-    async def activity(self, ctx: commands.Context, activity: str = None):
+    async def activity(self, interaction: discord.Interaction, activity: str = None):
+        await interaction.response.defer(ephemeral=True)
         await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=activity))
-        await ctx.author.send("Activity set")
+        await interaction.user.send("Activity set")
     @activity.error
     async def activity_error(self, ctx: commands.Context, error: commands.CommandError):
         await ctx.author.send(error)
