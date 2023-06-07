@@ -377,6 +377,8 @@ class RPG(commands.Cog):
         random_ore = ores.get(random.choices(list(ores), weights=weights)[0])
         if random_ore.get("name") == "Diamond":
             msg = f"🎉 You mined `{random_ore['name']}` and sold it for {math.floor(random_ore['value'])}<:Shields_SM:1104809716460310549> 🎉"
+            thread = ctx.guild.get_thread(1108168152946331668)
+            await thread.send(f":sparkles: `{ctx.author.name}` mined a `{random_ore['name']}` worth {math.floor(random_ore['value'])}<:Shields_SM:1104809716460310549> :sparkles:")
         else:
             msg = f"You mined `{random_ore['name']}` and sold it for {math.floor(random_ore['value'])}<:Shields_SM:1104809716460310549>"
         db.update_one(
@@ -452,7 +454,16 @@ class RPG(commands.Cog):
                 0
             ]
         )
+        
+        if ctx.author.id in self.bot.owner_ids:
+            random_fish = fishes.get("swordfish")
+            
         msg = f"You caught `{random_fish['name']}` and sold it for {math.floor(random_fish['value'])}<:Shields_SM:1104809716460310549>"
+        
+        if random_fish.get("name") == "Tuna" or random_fish.get("name") == "Swordfish":
+            thread = ctx.guild.get_thread(1108168152946331668)
+            await thread.send(f":sparkles: `{ctx.author.name}` fished up a `{random_fish['name']}` worth {math.floor(random_fish['value'])}<:Shields_SM:1104809716460310549> :sparkles:")
+            
         db.update_one(
             {"_id": ctx.author.id},
             {"$inc": {"shields": math.floor(random_fish["value"])}},
