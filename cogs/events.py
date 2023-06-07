@@ -38,7 +38,7 @@ class Events(commands.Cog):
     async def on_ready(self):
         print(f"Username: {self.bot.user.name}")
         print(f"ID: {str(self.bot.user.id)}")
-        await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="The bot reset, ping Birb"))
+        await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Bronya sleep"))
 
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
