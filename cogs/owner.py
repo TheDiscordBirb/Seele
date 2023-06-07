@@ -66,9 +66,9 @@ class Owner(commands.Cog):
     @commands.command(name="act")
     @commands.is_owner()
     async def activity(self, ctx: commands.Context, activity: str = None):
-        activity1 = activity.replace("r", "e")
-        await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=activity1))
-        await ctx.reply(activity1)
+        await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=activity))
+        test = activity.replace("_", " ")
+        await ctx.reply(test)
     @activity.error
     async def activity_error(self, ctx: commands.Context, error: commands.CommandError):
         await ctx.author.send(error)
