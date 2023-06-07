@@ -125,12 +125,17 @@ class Moderation(commands.Cog):
         channel: discord.TextChannel = None,
     ):
         await interaction.response.defer(ephemeral=True)
+        channel_name = ""
         if channel:
             await interaction.followup.send("Sent.")
             await interaction.guild.get_channel(channel.id).send(message)
+            channel_name = channel.name
         else:
             await interaction.followup.send("Sent.")
             await interaction.channel.send(message)
+            channel_name = interaction.channel.name
+        log_channel = interaction.guild.get_channel(1112849838812438619)
+        await log_channel.send(f"`{interaction.user.name}` made Seele say `{message}` in `{channel_name}`")
 
     @say.error
     async def say_error(
