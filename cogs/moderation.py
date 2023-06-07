@@ -174,7 +174,7 @@ class Moderation(commands.Cog):
         await interaction.response.send_message(error, ephemeral=True)
         
     
-    @tasks.loop(minutes=1)
+    @tasks.loop(seconds=20)
     async def activity_set(self, activity: str):
         await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=activity))
 
