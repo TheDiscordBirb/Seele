@@ -126,8 +126,6 @@ class Moderation(commands.Cog):
     ):
         await interaction.response.defer(ephemeral=True)
         channel_name = ""
-        if interaction.user.id == 932881107916062801:
-            message = "Vish says " + message
         if channel:
             await interaction.followup.send("Sent.")
             await interaction.guild.get_channel(channel.id).send(message)
