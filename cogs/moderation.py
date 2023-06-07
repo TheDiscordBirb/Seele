@@ -162,7 +162,7 @@ class Moderation(commands.Cog):
         await interaction.followup.send("Activity set")
 
     @activity.error
-    async def act_error(
+    async def activity_error(
         self, interaction: discord.Interaction, error: commands.CommandError
     ):
         if isinstance(error, commands.errors.MissingAnyRole):
