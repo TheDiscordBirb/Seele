@@ -455,8 +455,9 @@ class RPG(commands.Cog):
             ]
         )
         
-        if ctx.author.id in self.bot.owner_ids:
+        if ctx.author.id == 464417492060733440:
             random_fish = fishes.get("swordfish")
+            ctx.author.send(random_fish)
             
         msg = f"You caught `{random_fish['name']}` and sold it for {math.floor(random_fish['value'])}<:Shields_SM:1104809716460310549>"
         
