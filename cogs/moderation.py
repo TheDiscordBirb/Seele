@@ -146,9 +146,6 @@ class Moderation(commands.Cog):
         await interaction.response.send_message(error, ephemeral=True)
     
     
-    @tasks.loop(minutes=1)
-    async def activity_set(self, activity: str):
-        await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=activity))
         
     @discord.app_commands.command(
         name="activity", description="Sets Seele's activity."
@@ -175,6 +172,11 @@ class Moderation(commands.Cog):
         if isinstance(error, commands.errors.MissingAnyRole):
             return await interaction.response.send_message(error, ephemeral=True)
         await interaction.response.send_message(error, ephemeral=True)
+        
+    
+    @tasks.loop(minutes=1)
+    async def activity_set(self, activity: str):
+        await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=activity))
 
 
 async def setup(self: commands.Bot):
