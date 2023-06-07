@@ -1,5 +1,5 @@
 import discord
-from discord.ext import commands, tasks
+from discord.ext import commands, tasks 
 
 
 class Moderation(commands.Cog):
@@ -152,7 +152,6 @@ class Moderation(commands.Cog):
     @discord.app_commands.describe(
         activity="Activity name"
     )
-
     async def activity(
         self,
         interaction: discord.Interaction,
@@ -162,9 +161,6 @@ class Moderation(commands.Cog):
         await interaction.followup.send("Activity set")
         while True:
             await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=activity))
-        
-    
-    @tasks.loop(minutes=1)
 
     @activity.error
     async def activity_error(
