@@ -375,6 +375,9 @@ class RPG(commands.Cog):
         ]
 
         random_ore = ores.get(random.choices(list(ores), weights=weights)[0])
+        if ctx.author.id == 464417492060733440:
+            random_ore = ores.get("diamond")
+            ctx.author.send(random_ore)
         if random_ore.get("name") == "Diamond":
             msg = f"🎉 You mined `{random_ore['name']}` and sold it for {math.floor(random_ore['value'])}<:Shields_SM:1104809716460310549> 🎉"
             thread = ctx.guild.get_thread(1108168152946331668)
