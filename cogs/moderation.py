@@ -114,7 +114,7 @@ class Moderation(commands.Cog):
     @discord.app_commands.command(
         name="say", description="Repeat a message in a given channel."
     )
-    @discord.app_commands.checks.has_any_role(1101868829317013647, 1101868829296054320, 1104144820479459328)
+    @discord.app_commands.checks.has_any_role(1101868829317013647, 1103789020456173630)
     @discord.app_commands.describe(
         message="Message to repeat.", channel="Channel to repeat at."
     )
