@@ -144,6 +144,27 @@ class Moderation(commands.Cog):
         if isinstance(error, commands.errors.MissingAnyRole):
             return await interaction.response.send_message(error, ephemeral=True)
         await interaction.response.send_message(error, ephemeral=True)
+        
+    @discord.app_commands.command(
+        name="activity"
+    )
+    @discord.app_commands.checks.has_any_role(1101868829317013647, 1101868829296054320, 1104144820479459328)
+    async def activity(
+        self,
+        interaction: discord.Interaction,
+        activity: str,
+    ):
+        await interaction.response.defer(ephemeral=True)
+        await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=activity))
+        await interaction.followup.send("Activity set")
+
+    @activity.error
+    async def act_error(
+        self, interaction: discord.Interaction, error: commands.CommandError
+    ):
+        if isinstance(error, commands.errors.MissingAnyRole):
+            return await interaction.response.send_message(error, ephemeral=True)
+        await interaction.response.send_message(error, ephemeral=True)
 
 
 async def setup(self: commands.Bot):
