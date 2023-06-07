@@ -146,9 +146,12 @@ class Moderation(commands.Cog):
         await interaction.response.send_message(error, ephemeral=True)
         
     @discord.app_commands.command(
-        name="activity"
+        name="activity", description="Sets Seele's activity."
     )
     @discord.app_commands.checks.has_any_role(1101868829317013647, 1101868829296054320, 1104144820479459328)
+    @discord.app_commands.describe(
+        activity="Activity name"
+    )
     async def activity(
         self,
         interaction: discord.Interaction,
